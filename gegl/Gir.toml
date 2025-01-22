@@ -1,0 +1,299 @@
+[options]
+library = "Gegl"
+version = "0.4"
+min_cfg_version = "0.4"
+target_path = "."
+girs_directories = ["../gir-files/", "../"]
+work_mode = "normal"
+single_version_file = true
+generate_safety_asserts = true
+deprecate_by_min_version = true
+
+generate = [
+  "Gegl.AbyssPolicy",
+  "Gegl.AccessMode",
+  "Gegl.BablVariant",
+  "Gegl.BlitFlags",
+  "Gegl.CachePolicy",
+  "Gegl.Config",
+  "Gegl.DistanceMetric",
+  "Gegl.DitherMethod",
+  "Gegl.LookupFunction",
+  "Gegl.MapFlags",
+  "Gegl.MetadataHash",
+  "Gegl.NodeFunction",
+  "Gegl.Operation",
+  "Gegl.Orientation",
+  "Gegl.PadType",
+  "Gegl.Random",
+  "Gegl.RectangleAlignment",
+  "Gegl.ResolutionUnit",
+  "Gegl.SamplerGetFun",
+  "Gegl.SamplerType",
+  "Gegl.SerializeFlag",
+  "Gegl.SplitStrategy",
+  "Gegl.Stats",
+  "Gegl.TileCommand",
+  "Gegl.TileSource",
+  "Gegl.TileSourceCommand",
+  "Gegl.ParamAudioFragment",
+  "Gegl.ParamColor",
+  "Gegl.ParamCurve",
+  "Gegl.ParamPath",
+  # "Gegl.ParamDouble",
+  # "Gegl.ParamEnum",
+  # "Gegl.ParamFilePath",
+  # "Gegl.ParamFormat",
+  # "Gegl.ParamInt",
+  # "Gegl.ParamSeed",
+  # "Gegl.ParamString",
+  # "Gegl.ParamUri",
+]
+
+manual = [
+  "GLib.Error",
+  "GObject.Value",
+  "GLib.OptionGroup",
+  "GObject.ParamSpec",
+  "GObject.ParamFlags",
+  "GObject.ParamSpecPointer",
+  "GObject.ParamSpecString",
+  "GObject.ParamSpecEnum",
+  "GObject.ParamSpecDouble",
+  "GObject.ParamSpecInt",
+  "GObject.ParamSpecUInt",
+  "GLib.DestroyNotify",
+  "GObject.Callback",
+  "GLib.DateTime",
+  "Babl.Object",
+]
+
+[[object]]
+name = "Gegl.*"
+status = "generate"
+    [[object.function]]
+    name = "param_spec_get_property_key"
+    ignore = true
+    [[object.function]]
+    name = "param_spec_set_property_key"
+    ignore = true
+    [[object.function]]
+    name = "param_spec_color_get_default"
+    ignore = true
+    [[object.function]]
+    name = "param_spec_color"
+    ignore = true
+    [[object.function]]
+    name = "get_option_group"
+    ignore = true
+    [[object.function]]
+    name = "babl_variant"
+    ignore = true
+    [[object.function]]
+    name = "create_chain_argv"
+    ignore = true
+    [[object.function]]
+    name = "config"
+    trust_return_value_nullability = true
+        [object.function.return]
+        nullable = false
+
+[[object]]
+generate_builder = true
+name = "Gegl.AudioFragment"
+status = "generate"
+
+[[object]]
+generate_builder = true
+name = "Gegl.Buffer"
+status = "generate"
+    [[object.function]]
+    name = "new"
+    ignore = true
+    [[object.function]]
+    name = "linear_new"
+    ignore = true
+    [[object.function]]
+    name = "set_format"
+    ignore = true
+    [[object.function]]
+    name = "get_format"
+    ignore = true
+    
+[[object]]
+name = "Gegl.BufferIterator" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.BufferIteratorItem" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.BufferIteratorPriv" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.BufferMatrix2" 
+status = "ignore" # a record
+
+[[object]]
+generate_builder = true
+name = "Gegl.Color" 
+status = "generate"
+    [[object.function]]
+    name = "get_format"
+    ignore = true
+
+[[object]]
+generate_builder = true
+name = "Gegl.Curve" 
+status = "ignore" 
+    [[object.function]]
+    name = "calc_values"
+    ignore = true
+
+[[object]]
+name = "Gegl.Lookup" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.Matrix3" 
+status = "generate"
+    [[object.derive]]
+    name = "Debug"
+    [[object.function]]
+    name = "transform_point"
+    ignore = true
+    [[object.function]]
+    name = "equal"
+    ignore = true
+    [[object.function]]
+    name = "to_string"
+    ignore = true
+
+[[object]]
+name = "Gegl.Metadata" 
+status = "generate"
+    [[object.function]]
+    name = "get_resolution"
+    ignore = true
+
+[[object]]
+name = "Gegl.MetadataIter" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.MetadataMap" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.MetadataStore"
+status = "generate"
+    [[object.function]]
+    name = "declare"
+    ignore = true
+    [[object.function]]
+    name = "notify"
+    ignore = true
+
+[[object]]
+name = "Gegl.OperationContext" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.ParamSpecDouble" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.ParamSpecEnum" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.ParamSpecFilePath" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.ParamSpecFormat" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.ParamSpecInt" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.ParamSpecSeed" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.ParamSpecString" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.ParamSpecUri" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.Path" 
+status = "generate"
+    [[object.function]]
+    name = "calc_values"
+    ignore = true
+    [[object.function]]
+    name = "get_matrix"
+    ignore = true
+
+[[object]]
+name = "Gegl.PathItem" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.PathPoint" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.PathList" 
+status = "ignore" # a record
+
+[[object]]
+generate_builder = true
+name = "Gegl.Processor" 
+status = "generate"
+
+[[object]]
+name = "Gegl.Rectangle"
+status = "generate"
+boxed_inline = true
+    [[object.function]]
+    name = "infinite_plane"
+    ignore = true
+
+[[object]]
+name = "Gegl.Sampler" 
+status = "ignore" # a record
+
+[[object]]
+name = "Gegl.Tile" 
+status = "ignore" # a record
+
+[[object]]
+generate_builder = true
+name = "Gegl.TileBackend" 
+status = "generate"
+    [[object.function]]
+    name = "get_extent"
+    ignore = true
+    
+    [[object.function]]
+    name = "get_format"
+    ignore = true
+
+
+[[object]]
+generate_builder = true
+name = "Gegl.TileHandler" 
+status = "generate"
+
+[[object]]
+name = "Gegl.TileCopyParams" 
+status = "ignore" # a record
+

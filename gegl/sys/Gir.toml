@@ -1,0 +1,14 @@
+[options]
+library = "Gegl"
+version = "0.4"
+min_cfg_version = "0.4"
+target_path = "."
+girs_directories = ["../../gir-files/", "../../"]
+work_mode = "sys"
+single_version_file = true
+
+external_libraries = [
+    "Babl",
+    "GLib",
+    "GObject",
+]
