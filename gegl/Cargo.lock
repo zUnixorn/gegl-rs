@@ -11,6 +11,7 @@ checksum = "ace50bade8e6234aa140d9a2f552bbee1db4d353f69b8217bc503490fc1a9f26"
 [[package]]
 name = "babl"
 version = "0.1.0"
+source = "git+ssh://git@github.com/zUnixorn/babl-rs.git#d3eeb6a108918445b0ea2fb91327018fb3a0cdb2"
 dependencies = [
  "babl-sys",
  "bitflags",
@@ -23,6 +24,7 @@ dependencies = [
 [[package]]
 name = "babl-sys"
 version = "0.0.1"
+source = "git+ssh://git@github.com/zUnixorn/babl-rs.git#d3eeb6a108918445b0ea2fb91327018fb3a0cdb2"
 dependencies = [
  "glib-sys",
  "gobject-sys",
