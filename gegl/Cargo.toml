@@ -22,7 +22,7 @@ package = "gegl-sys"
 path = "./sys"
 
 [dependencies.babl]
-git = "ssh://git@github.com/zUnixorn/babl-rs.git"
+git = "https://github.com/zUnixorn/babl-rs.git"
 
 [dependencies.babl-sys]
-git = "ssh://git@github.com/zUnixorn/babl-rs.git"
+git = "https://github.com/zUnixorn/babl-rs.git"
