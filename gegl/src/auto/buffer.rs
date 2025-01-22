@@ -9,6 +9,97 @@ use glib::{prelude::*,signal::{connect_raw, SignalHandlerId},translate::*};
 use std::{boxed::Box as Box_};
 
 glib::wrapper! {
+    ///
+    ///
+    /// ## Properties
+    ///
+    ///
+    /// #### `abyss-height`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `abyss-width`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `abyss-x`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `abyss-y`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `backend`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `format`
+    ///  Readable | Writeable | Construct
+    ///
+    ///
+    /// #### `height`
+    ///  Readable | Writeable | Construct
+    ///
+    ///
+    /// #### `initialized`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `path`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `pixels`
+    ///  Readable
+    ///
+    ///
+    /// #### `px-size`
+    ///  Readable
+    ///
+    ///
+    /// #### `shift-x`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `shift-y`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `tile-height`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `tile-width`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `width`
+    ///  Readable | Writeable | Construct
+    ///
+    ///
+    /// #### `x`
+    ///  Readable | Writeable | Construct
+    ///
+    ///
+    /// #### `y`
+    ///  Readable | Writeable | Construct
+    /// <details><summary><h4>TileHandler</h4></summary>
+    ///
+    ///
+    /// #### `source`
+    ///  Readable | Writeable | Construct
+    /// </details>
+    ///
+    /// ## Signals
+    ///
+    ///
+    /// #### `changed`
+    ///
+    ///
+    /// # Implements
+    ///
+    /// [`TileHandlerExt`][trait@crate::prelude::TileHandlerExt], [`TileSourceExt`][trait@crate::prelude::TileSourceExt]
     #[doc(alias = "GeglBuffer")]
     pub struct Buffer(Object<ffi::GeglBuffer>) @extends TileHandler, TileSource;
 
@@ -18,6 +109,17 @@ glib::wrapper! {
 }
 
 impl Buffer {
+    /// Create a new GeglBuffer with the given format and dimensions.
+    /// ## `format_name`
+    /// The Babl format name for this buffer, e.g. "RGBA float"
+    /// ## `x`
+    /// x origin of the buffer's extent
+    /// ## `y`
+    /// y origin of the buffer's extent
+    /// ## `width`
+    /// width of the buffer's extent
+    /// ## `height`
+    /// height of the buffer's extent
     #[doc(alias = "gegl_buffer_introspectable_new")]
     pub fn introspectable_new(format_name: &str, x: i32, y: i32, width: i32, height: i32) -> Buffer {
         assert_initialized_main_thread!();
@@ -31,6 +133,15 @@ impl Buffer {
     //    unsafe { TODO: call ffi:gegl_buffer_linear_new_from_data() }
     //}
 
+    /// Create a new GeglBuffer from a backend, if NULL is passed in the extent of
+    /// the buffer will be inherited from the extent of the backend.
+    ///
+    /// returns a GeglBuffer, that holds a reference to the provided backend.
+    /// ## `extent`
+    /// the geometry of the buffer (origin, width and height) a
+    /// GeglRectangle.
+    /// ## `backend`
+    /// an instance of a GeglTileBackend subclass.
     #[doc(alias = "gegl_buffer_new_for_backend")]
     #[doc(alias = "new_for_backend")]
     pub fn for_backend(extent: &Rectangle, backend: &impl IsA<TileBackend>) -> Buffer {
@@ -54,6 +165,10 @@ impl Buffer {
     //    unsafe { TODO: call ffi:gegl_buffer_add_handler() }
     //}
 
+    /// Clears the provided rectangular region by setting all the associated memory
+    /// to 0.
+    /// ## `roi`
+    /// a rectangular region
     #[doc(alias = "gegl_buffer_clear")]
     pub fn clear(&self, roi: &Rectangle) {
         unsafe {
@@ -68,6 +183,13 @@ impl Buffer {
         }
     }
 
+    /// Create a new sub GeglBuffer, that is a view on a larger buffer.
+    /// ## `extent`
+    /// coordinates of new buffer.
+    ///
+    /// # Returns
+    ///
+    /// the new sub buffer
     #[doc(alias = "gegl_buffer_create_sub_buffer")]
 #[must_use]
     pub fn create_sub_buffer(&self, extent: &Rectangle) -> Option<Buffer> {
@@ -76,6 +198,12 @@ impl Buffer {
         }
     }
 
+    /// Duplicate a buffer (internally uses gegl_buffer_copy). Aligned tiles
+    /// will create copy-on-write clones in the new buffer.
+    ///
+    /// # Returns
+    ///
+    /// the new buffer
     #[doc(alias = "gegl_buffer_dup")]
 #[must_use]
     pub fn dup(&self) -> Option<Buffer> {
@@ -84,6 +212,8 @@ impl Buffer {
         }
     }
 
+    /// Flushes all unsaved data to disk, this is not necessary for shared
+    /// geglbuffers opened with gegl_buffer_open since they auto-sync on writes.
     #[doc(alias = "gegl_buffer_flush")]
     pub fn flush(&self) {
         unsafe {
@@ -91,6 +221,13 @@ impl Buffer {
         }
     }
 
+    /// Invokes the external flush function, if any is set on the provided buffer -
+    /// this ensures that data pending - in the current implementation only OpenCL -
+    /// externally to be synchronized with the buffer. Multi threaded code should
+    /// call such a synchronization before branching out to avoid each of the
+    /// threads having an implicit synchronization of its own.
+    /// ## `rect`
+    /// rectangle
     #[doc(alias = "gegl_buffer_flush_ext")]
     pub fn flush_ext(&self, rect: &Rectangle) {
         unsafe {
@@ -98,6 +235,10 @@ impl Buffer {
         }
     }
 
+    /// Blocks emission of the "changed" signal for `self`.
+    ///
+    /// While the signal is blocked, changes to `self` are accumulated, and will
+    /// be emitted once the signal is unblocked, using [`thaw_changed()`][Self::thaw_changed()].
     #[doc(alias = "gegl_buffer_freeze_changed")]
     pub fn freeze_changed(&self) {
         unsafe {
@@ -110,6 +251,8 @@ impl Buffer {
     //    unsafe { TODO: call ffi:gegl_buffer_get() }
     //}
 
+    /// Return the abyss extent of a buffer, this expands out to the parents extent in
+    /// subbuffers.
     #[doc(alias = "gegl_buffer_get_abyss")]
     #[doc(alias = "get_abyss")]
     pub fn abyss(&self) -> Option<Rectangle> {
@@ -118,6 +261,9 @@ impl Buffer {
         }
     }
 
+    /// Returns a pointer to a GeglRectangle structure defining the geometry of a
+    /// specific GeglBuffer, this is also the default width/height of buffers passed
+    /// in to gegl_buffer_set and gegl_buffer_get (with a scale of 1.0 at least).
     #[doc(alias = "gegl_buffer_get_extent")]
     #[doc(alias = "get_extent")]
     pub fn extent(&self) -> Option<Rectangle> {
@@ -132,6 +278,23 @@ impl Buffer {
     //    unsafe { TODO: call ffi:gegl_buffer_get_tile() }
     //}
 
+    /// Fetch a rectangular linear buffer of pixel data from the GeglBuffer.
+    /// ## `rect`
+    /// the coordinates we want to retrieve data from.
+    /// ## `scale`
+    /// sampling scale, 1.0 = pixel for pixel 2.0 = magnify, 0.5 scale down.
+    /// ## `format_name`
+    /// the format to store data in, if NULL the format of the buffer is used.
+    /// ## `repeat_mode`
+    /// how requests outside the buffer extent are handled.
+    /// Valid values: GEGL_ABYSS_NONE (abyss pixels are zeroed), GEGL_ABYSS_WHITE
+    /// (abyss pixels are white), GEGL_ABYSS_BLACK (abyss pixels are black),
+    /// GEGL_ABYSS_CLAMP (coordinates are clamped to the abyss rectangle),
+    /// GEGL_ABYSS_LOOP (buffer contents are tiled if outside of the abyss rectangle).
+    ///
+    /// # Returns
+    ///
+    /// A copy of the requested data
     #[doc(alias = "gegl_buffer_introspectable_get")]
     pub fn introspectable_get(&self, rect: &Rectangle, scale: f64, format_name: Option<&str>, repeat_mode: AbyssPolicy) -> Vec<u8> {
         unsafe {
@@ -141,6 +304,13 @@ impl Buffer {
         }
     }
 
+    /// Store a linear raster buffer into the GeglBuffer.
+    /// ## `rect`
+    /// the rectangle to write.
+    /// ## `format_name`
+    /// the format of the input data.
+    /// ## `src`
+    /// pixel data to write to `self`.
     #[doc(alias = "gegl_buffer_introspectable_set")]
     pub fn introspectable_set(&self, rect: &Rectangle, format_name: &str, src: &[u8]) {
         let src_length = src.len() as _;
@@ -179,6 +349,12 @@ impl Buffer {
     //    unsafe { TODO: call ffi:gegl_buffer_sample_at_level() }
     //}
 
+    /// Clean up resources used by sampling framework of buffer.
+    ///
+    /// # Deprecated since 0.4.2
+    ///
+    /// This function has no effect. It is not necessary to call
+    /// it after using `gegl_buffer_sample()` or `gegl_buffer_sample_at_level()`.
     #[cfg_attr(feature = "v0_4_2", deprecated = "Since 0.4.2")]
     #[allow(deprecated)]
     #[doc(alias = "gegl_buffer_sample_cleanup")]
@@ -198,6 +374,12 @@ impl Buffer {
     //    unsafe { TODO: call ffi:gegl_buffer_sampler_new_at_level() }
     //}
 
+    /// Write a GeglBuffer to a file.
+    /// ## `path`
+    /// the path where the gegl buffer will be saved, any writable GIO uri is valid.
+    /// ## `roi`
+    /// the region of interest to write, this is the tiles that will be collected and
+    /// written to disk.
     #[doc(alias = "gegl_buffer_save")]
     pub fn save(&self, path: &str, roi: &Rectangle) {
         unsafe {
@@ -210,6 +392,11 @@ impl Buffer {
     //    unsafe { TODO: call ffi:gegl_buffer_set() }
     //}
 
+    /// Changes the size and position of the abyss rectangle of a buffer.
+    ///
+    /// Returns TRUE if the change of abyss was successful.
+    /// ## `abyss`
+    /// new abyss.
     #[doc(alias = "gegl_buffer_set_abyss")]
     pub fn set_abyss(&self, abyss: &Rectangle) -> bool {
         unsafe {
@@ -217,6 +404,11 @@ impl Buffer {
         }
     }
 
+    /// Sets the region covered by rect to the specified color.
+    /// ## `rect`
+    /// a rectangular region to fill with a color.
+    /// ## `color`
+    /// the GeglColor to fill with.
     #[doc(alias = "gegl_buffer_set_color")]
     pub fn set_color(&self, rect: &Rectangle, color: &impl IsA<Color>) {
         unsafe {
@@ -229,6 +421,13 @@ impl Buffer {
     //    unsafe { TODO: call ffi:gegl_buffer_set_color_from_pixel() }
     //}
 
+    /// Changes the size and position that is considered active in a buffer, this
+    /// operation is valid on any buffer, reads on subbuffers outside the master
+    /// buffer's extent are at the moment undefined.
+    ///
+    /// Returns TRUE if the change of extent was successful.
+    /// ## `extent`
+    /// new extent.
     #[doc(alias = "gegl_buffer_set_extent")]
     pub fn set_extent(&self, extent: &Rectangle) -> bool {
         unsafe {
@@ -236,6 +435,17 @@ impl Buffer {
         }
     }
 
+    /// Fill a region with a repeating pattern. Offsets parameters are
+    /// relative to the origin (0, 0) and not to the rectangle. So be carefull
+    /// about the origin of `pattern` and `self` extents.
+    /// ## `rect`
+    /// the region of `self` to fill
+    /// ## `pattern`
+    /// a [`Buffer`][crate::Buffer] to be repeated as a pattern
+    /// ## `x_offset`
+    /// where the pattern starts horizontally
+    /// ## `y_offset`
+    /// where the pattern starts vertical
     #[doc(alias = "gegl_buffer_set_pattern")]
     pub fn set_pattern(&self, rect: &Rectangle, pattern: &Buffer, x_offset: i32, y_offset: i32) {
         unsafe {
@@ -243,6 +453,11 @@ impl Buffer {
         }
     }
 
+    /// Checks if a pair of buffers share the same underlying tile storage.
+    ///
+    /// Returns TRUE if `self` and `buffer2` share the same storage.
+    /// ## `buffer2`
+    /// a [`Buffer`][crate::Buffer].
     #[doc(alias = "gegl_buffer_share_storage")]
     pub fn share_storage(&self, buffer2: &Buffer) -> bool {
         unsafe {
@@ -255,6 +470,10 @@ impl Buffer {
     //    unsafe { TODO: call ffi:gegl_buffer_signal_connect() }
     //}
 
+    /// Unblocks emission of the "changed" signal for `self`.
+    ///
+    /// Once all calls to [`freeze_changed()`][Self::freeze_changed()] are matched by corresponding
+    /// calls to [`freeze_changed()`][Self::freeze_changed()], all accumulated changes are emitted.
     #[doc(alias = "gegl_buffer_thaw_changed")]
     pub fn thaw_changed(&self) {
         unsafe {
@@ -363,6 +582,15 @@ impl Buffer {
         ObjectExt::set_property(self,"y", y)
     }
 
+    /// Loads an existing GeglBuffer from disk, if it has previously been saved with
+    /// gegl_buffer_save it should be possible to open through any GIO transport, buffers
+    /// that have been used as swap needs random access to be opened.
+    /// ## `path`
+    /// the path to a gegl buffer on disk.
+    ///
+    /// # Returns
+    ///
+    /// a [`Buffer`][crate::Buffer] object.
     #[doc(alias = "gegl_buffer_load")]
     pub fn load(path: &str) -> Option<Buffer> {
         assert_initialized_main_thread!();
@@ -371,6 +599,15 @@ impl Buffer {
         }
     }
 
+    /// Open an existing on-disk GeglBuffer, this buffer is opened in a monitored
+    /// state so multiple instances of gegl can share the same buffer. Sets on
+    /// one buffer are reflected in the other.
+    /// ## `path`
+    /// the path to a gegl buffer on disk.
+    ///
+    /// # Returns
+    ///
+    /// a GeglBuffer object.
     #[doc(alias = "gegl_buffer_open")]
     pub fn open(path: &str) -> Option<Buffer> {
         assert_initialized_main_thread!();
@@ -379,6 +616,19 @@ impl Buffer {
         }
     }
 
+    /// Generates a unique filename in the GEGL swap directory, suitable for
+    /// using as swap space. When the file is no longer needed, it may be
+    /// removed with [`swap_remove_file()`][Self::swap_remove_file()]; otherwise, it will be
+    /// removed when [`exit()`][crate::exit()] is called.
+    /// ## `suffix`
+    /// a string to suffix the filename with, for
+    ///  identification purposes, or [`None`].
+    ///
+    /// # Returns
+    ///
+    /// a string containing the full
+    /// file path, or [`None`] is the swap is disabled. The returned string
+    /// should be freed with `g_free()` when no longer needed.
     #[doc(alias = "gegl_buffer_swap_create_file")]
     pub fn swap_create_file(suffix: Option<&str>) -> Option<std::path::PathBuf> {
         assert_initialized_main_thread!();
@@ -387,6 +637,11 @@ impl Buffer {
         }
     }
 
+    /// Tests if `path` is a swap file, that is, if it has been created
+    /// with [`swap_create_file()`][Self::swap_create_file()], and hasn't been removed
+    /// yet.
+    /// ## `path`
+    /// a filename
     #[doc(alias = "gegl_buffer_swap_has_file")]
     pub fn swap_has_file(path: impl AsRef<std::path::Path>) -> bool {
         assert_initialized_main_thread!();
@@ -395,6 +650,11 @@ impl Buffer {
         }
     }
 
+    /// Removes a swap file, generated using [`swap_create_file()`][Self::swap_create_file()],
+    /// unlinking the file, if exists.
+    /// ## `path`
+    /// the swap file to remove, as returned by
+    ///  [`swap_create_file()`][Self::swap_create_file()]
     #[doc(alias = "gegl_buffer_swap_remove_file")]
     pub fn swap_remove_file(path: impl AsRef<std::path::Path>) {
         assert_initialized_main_thread!();

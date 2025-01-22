@@ -8,6 +8,57 @@ use glib::{prelude::*,signal::{connect_raw, SignalHandlerId},translate::*};
 use std::{boxed::Box as Box_};
 
 glib::wrapper! {
+    ///
+    ///
+    /// ## Properties
+    ///
+    ///
+    /// #### `application-license`
+    ///  Readable | Writeable | Construct
+    ///
+    ///
+    /// #### `chunk-size`
+    ///  Readable | Writeable | Construct
+    ///
+    ///
+    /// #### `mipmap-rendering`
+    ///  Readable | Writeable | Construct
+    ///
+    ///
+    /// #### `quality`
+    ///  Readable | Writeable | Construct
+    ///
+    ///
+    /// #### `queue-size`
+    ///  Readable | Writeable
+    ///
+    ///
+    /// #### `swap`
+    ///  Readable | Writeable
+    ///
+    ///
+    /// #### `swap-compression`
+    ///  Readable | Writeable
+    ///
+    ///
+    /// #### `threads`
+    ///  Readable | Writeable | Construct
+    ///
+    ///
+    /// #### `tile-cache-size`
+    ///  Readable | Writeable
+    ///
+    ///
+    /// #### `tile-height`
+    ///  Readable | Writeable
+    ///
+    ///
+    /// #### `tile-width`
+    ///  Readable | Writeable
+    ///
+    ///
+    /// #### `use-opencl`
+    ///  Readable | Writeable | Construct
     #[doc(alias = "GeglConfig")]
     pub struct Config(Object<ffi::GeglConfig>);
 

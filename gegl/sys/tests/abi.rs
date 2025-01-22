@@ -91,9 +91,7 @@ struct Layout {
 
 #[derive(Copy, Clone, Debug, Default, Eq, PartialEq)]
 struct Results {
-    /// Number of successfully completed tests.
     passed: usize,
-    /// Total number of failed tests (including those that failed to compile).
     failed: usize,
 }
 

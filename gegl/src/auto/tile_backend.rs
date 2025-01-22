@@ -9,6 +9,37 @@ use glib::{prelude::*,signal::{connect_raw, SignalHandlerId},translate::*};
 use std::{boxed::Box as Box_};
 
 glib::wrapper! {
+    ///
+    ///
+    /// ## Properties
+    ///
+    ///
+    /// #### `flush-on-destroy`
+    ///  Readable | Writeable
+    ///
+    ///
+    /// #### `format`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `px-size`
+    ///  Readable
+    ///
+    ///
+    /// #### `tile-height`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `tile-size`
+    ///  Readable
+    ///
+    ///
+    /// #### `tile-width`
+    ///  Readable | Writeable | Construct Only
+    ///
+    /// # Implements
+    ///
+    /// [`TileBackendExt`][trait@crate::prelude::TileBackendExt], [`TileSourceExt`][trait@crate::prelude::TileSourceExt]
     #[doc(alias = "GeglTileBackend")]
     pub struct TileBackend(Object<ffi::GeglTileBackend, ffi::GeglTileBackendClass>) @extends TileSource;
 
@@ -30,6 +61,18 @@ impl TileBackend {
             }
         
 
+    /// Delete a swap file from disk. This must be used by tile backends which may
+    /// swap to disk under certain circonstances.
+    ///
+    /// For safety, this function will check that the swap file is in the swap
+    /// directory before deletion but it won't perform any other check.
+    ///
+    /// # Deprecated since 0.4.14
+    ///
+    /// This function is not compatible with a dynamically-
+    /// changing swap path. Use [`Buffer::swap_remove_file()`][crate::Buffer::swap_remove_file()] instead.
+    /// ## `path`
+    /// the path where the gegl tile backend has swapped.
     #[cfg_attr(feature = "v0_4_14", deprecated = "Since 0.4.14")]
     #[allow(deprecated)]
     #[doc(alias = "gegl_tile_backend_unlink_swap")]
@@ -79,6 +122,11 @@ assert_initialized_main_thread!();
     self.builder.build() }
 }
 
+/// Trait containing all [`struct@TileBackend`] methods.
+///
+/// # Implementors
+///
+/// [`TileBackend`][struct@crate::TileBackend]
 pub trait TileBackendExt: IsA<TileBackend> + 'static {
     //#[doc(alias = "gegl_tile_backend_command")]
     //fn command(&self, command: TileCommand, x: i32, y: i32, z: i32, data: /*Unimplemented*/Option<Basic: Pointer>) -> /*Unimplemented*/Option<Basic: Pointer> {
@@ -94,6 +142,10 @@ pub trait TileBackendExt: IsA<TileBackend> + 'static {
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// the height of tile from this backend
     #[doc(alias = "gegl_tile_backend_get_tile_height")]
     #[doc(alias = "get_tile_height")]
     #[doc(alias = "tile-height")]
@@ -103,6 +155,10 @@ pub trait TileBackendExt: IsA<TileBackend> + 'static {
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// the size in bytes for a tile from this backend
     #[doc(alias = "gegl_tile_backend_get_tile_size")]
     #[doc(alias = "get_tile_size")]
     #[doc(alias = "tile-size")]
@@ -112,6 +168,10 @@ pub trait TileBackendExt: IsA<TileBackend> + 'static {
         }
     }
 
+    ///
+    /// # Returns
+    ///
+    /// the width of tile from this backend
     #[doc(alias = "gegl_tile_backend_get_tile_width")]
     #[doc(alias = "get_tile_width")]
     #[doc(alias = "tile-width")]
@@ -121,6 +181,11 @@ pub trait TileBackendExt: IsA<TileBackend> + 'static {
         }
     }
 
+    /// Gets a pointer to the GeglTileStorage that uses the backend
+    ///
+    /// # Returns
+    ///
+    /// the `GeglTileStorage`
     #[doc(alias = "gegl_tile_backend_peek_storage")]
     fn peek_storage(&self) -> Option<TileSource> {
         unsafe {
@@ -128,6 +193,11 @@ pub trait TileBackendExt: IsA<TileBackend> + 'static {
         }
     }
 
+    /// Specify the extent of the backend, can be used to pre-prime the
+    /// backend with the width/height information when constructing proxy
+    /// GeglBuffers to interact with other systems
+    /// ## `rectangle`
+    /// the new extent
     #[doc(alias = "gegl_tile_backend_set_extent")]
     fn set_extent(&self, rectangle: &Rectangle) {
         unsafe {

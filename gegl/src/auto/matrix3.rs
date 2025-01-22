@@ -18,6 +18,10 @@ glib::wrapper! {
 }
 
 impl Matrix3 {
+    ///
+    /// # Returns
+    ///
+    /// A newly allocated [`Matrix3`][crate::Matrix3]
     #[doc(alias = "gegl_matrix3_new")]
     pub fn new() -> Matrix3 {
         assert_initialized_main_thread!();
@@ -26,6 +30,9 @@ impl Matrix3 {
         }
     }
 
+    /// Copies the matrix in `src` into `self`.
+    /// ## `src`
+    /// a [`Matrix3`][crate::Matrix3]
     #[doc(alias = "gegl_matrix3_copy_into")]
     pub fn copy_into(&mut self, src: &Matrix3) {
         unsafe {
@@ -33,6 +40,7 @@ impl Matrix3 {
         }
     }
 
+    /// Returns the determinant for the matrix.
     #[doc(alias = "gegl_matrix3_determinant")]
     pub fn determinant(&self) -> f64 {
         unsafe {
@@ -40,6 +48,7 @@ impl Matrix3 {
         }
     }
 
+    /// Set the provided `self` to the identity matrix.
     #[doc(alias = "gegl_matrix3_identity")]
     pub fn identity(&mut self) {
         unsafe {
@@ -47,6 +56,7 @@ impl Matrix3 {
         }
     }
 
+    /// Inverts `self`.
     #[doc(alias = "gegl_matrix3_invert")]
     pub fn invert(&mut self) {
         unsafe {
@@ -54,6 +64,9 @@ impl Matrix3 {
         }
     }
 
+    /// Check if a matrix only does an affine transformation.
+    ///
+    /// Returns TRUE if the matrix only does an affine transformation.
     #[doc(alias = "gegl_matrix3_is_affine")]
     pub fn is_affine(&self) -> bool {
         unsafe {
@@ -61,6 +74,9 @@ impl Matrix3 {
         }
     }
 
+    /// Check if a matrix is the identity matrix.
+    ///
+    /// Returns TRUE if the matrix is the identity matrix.
     #[doc(alias = "gegl_matrix3_is_identity")]
     pub fn is_identity(&self) -> bool {
         unsafe {
@@ -68,6 +84,9 @@ impl Matrix3 {
         }
     }
 
+    /// Check if a matrix only does scaling.
+    ///
+    /// Returns TRUE if the matrix only does scaling.
     #[doc(alias = "gegl_matrix3_is_scale")]
     pub fn is_scale(&self) -> bool {
         unsafe {
@@ -75,6 +94,9 @@ impl Matrix3 {
         }
     }
 
+    /// Check if a matrix only does translation.
+    ///
+    /// Returns TRUE if the matrix only does trasnlation.
     #[doc(alias = "gegl_matrix3_is_translate")]
     pub fn is_translate(&self) -> bool {
         unsafe {
@@ -82,6 +104,11 @@ impl Matrix3 {
         }
     }
 
+    /// Multiples `product` = `self` · `right`
+    /// ## `right`
+    /// a [`Matrix3`][crate::Matrix3]
+    /// ## `product`
+    /// a [`Matrix3`][crate::Matrix3] to store the result in.
     #[doc(alias = "gegl_matrix3_multiply")]
     pub fn multiply(&self, right: &Matrix3, product: &mut Matrix3) {
         unsafe {
@@ -89,6 +116,18 @@ impl Matrix3 {
         }
     }
 
+    /// Shift the origin of the transformation specified by `self`
+    /// to (`x`, `y`). In other words, calculate the matrix that:
+    ///
+    /// 1. Translates the input by (-`x`, -`y`).
+    ///
+    /// 2. Transforms the result using the original `self`.
+    ///
+    /// 3. Translates the result by (`x`, `y`).
+    /// ## `x`
+    /// x coordinate of new origin
+    /// ## `y`
+    /// y coordinate of new origin.
     #[doc(alias = "gegl_matrix3_originate")]
     pub fn originate(&mut self, x: f64, y: f64) {
         unsafe {
@@ -96,6 +135,10 @@ impl Matrix3 {
         }
     }
 
+    /// Parse a transofmation matrix from a string.
+    /// ## `string`
+    /// a string describing the matrix (right now a small subset of the
+    /// transform strings allowed by SVG)
     #[doc(alias = "gegl_matrix3_parse_string")]
     pub fn parse_string(&mut self, string: &str) {
         unsafe {
@@ -103,6 +146,7 @@ impl Matrix3 {
         }
     }
 
+    /// Rounds numerical errors in `self` to the nearest integer.
     #[doc(alias = "gegl_matrix3_round_error")]
     pub fn round_error(&mut self) {
         unsafe {

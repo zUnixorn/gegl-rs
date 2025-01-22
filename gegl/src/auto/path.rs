@@ -7,6 +7,13 @@ use crate::{ffi,Matrix3};
 use glib::{translate::*};
 
 glib::wrapper! {
+    ///
+    ///
+    /// ## Signals
+    ///
+    ///
+    /// #### `changed`
+    ///
     #[doc(alias = "GeglPath")]
     pub struct Path(Object<ffi::GeglPath, ffi::GeglPathClass>);
 
@@ -16,6 +23,9 @@ glib::wrapper! {
 }
 
 impl Path {
+    /// Creates a new [`Path`][crate::Path] with no nodes.
+    ///
+    /// Returns the newly created [`Path`][crate::Path]
     #[doc(alias = "gegl_path_new")]
     pub fn new() -> Path {
         assert_initialized_main_thread!();
@@ -24,6 +34,13 @@ impl Path {
         }
     }
 
+    /// Creates a new [`Path`][crate::Path] with the nodes described in the string
+    /// `instructions`. See [`parse_string()`][Self::parse_string()] for details of the
+    /// format of the string.
+    ///
+    /// Returns the newly created [`Path`][crate::Path]
+    /// ## `instructions`
+    /// a string describing the path.
     #[doc(alias = "gegl_path_new_from_string")]
     #[doc(alias = "new_from_string")]
     pub fn from_string(instructions: &str) -> Path {
@@ -38,6 +55,19 @@ impl Path {
     //    unsafe { TODO: call ffi:gegl_path_append() }
     //}
 
+    /// Compute the coordinates of the path at the `position` (length measured from
+    /// start of path, not including discontinuities).
+    /// ## `pos`
+    /// how far along the path.
+    ///
+    /// # Returns
+    ///
+    ///
+    /// ## `x`
+    /// return location for x coordinate.
+    ///
+    /// ## `y`
+    /// return location for y coordinate
     #[doc(alias = "gegl_path_calc")]
     pub fn calc(&self, pos: f64) -> Option<(f64, f64)> {
         unsafe {
@@ -48,6 +78,17 @@ impl Path {
         }
     }
 
+    /// Compute a corresponding y coordinate for a given x input coordinate,
+    /// returns 0 if computed correctly and -1 if the path doesn't exist for the
+    /// specified x coordinate.
+    /// ## `x`
+    /// x coordinate to compute for
+    ///
+    /// # Returns
+    ///
+    ///
+    /// ## `y`
+    /// return location for y coordinate
     #[doc(alias = "gegl_path_calc_y_for_x")]
     pub fn calc_y_for_x(&self, x: f64) -> (i32, f64) {
         unsafe {
@@ -57,6 +98,7 @@ impl Path {
         }
     }
 
+    /// Remove all nods from a `self`.
     #[doc(alias = "gegl_path_clear")]
     pub fn clear(&self) {
         unsafe {
@@ -64,6 +106,26 @@ impl Path {
         }
     }
 
+    /// Figure out what and where on a path is closest to arbitrary coordinates.
+    ///
+    /// Returns the length along the path where the closest point was encountered.
+    /// ## `x`
+    /// x coordinate.
+    /// ## `y`
+    /// y coordinate
+    ///
+    /// # Returns
+    ///
+    ///
+    /// ## `on_path_x`
+    /// return location for x coordinate on the path that was closest
+    ///
+    /// ## `on_path_y`
+    /// return location for y coordinate on the path that was closest
+    ///
+    /// ## `node_pos_before`
+    /// the node position interpreted before this position
+    /// was deemed the closest coordinate.
     #[doc(alias = "gegl_path_closest_point")]
     pub fn closest_point(&self, x: f64, y: f64) -> (f64, f64, f64, i32) {
         unsafe {
@@ -75,6 +137,8 @@ impl Path {
         }
     }
 
+    /// Marks the path as dirty and issues an invalidation for the path rendering,
+    /// use this if modifying the values of a GeglPathPoint inline.
     #[doc(alias = "gegl_path_dirty")]
     pub fn dirty(&self) {
         unsafe {
@@ -92,6 +156,8 @@ impl Path {
     //    unsafe { TODO: call ffi:gegl_path_foreach_flat() }
     //}
 
+    /// Make the [`Path`][crate::Path] stop firing signals as it changes must be paired with a
+    /// [`thaw()`][Self::thaw()] for the signals to start again.
     #[doc(alias = "gegl_path_freeze")]
     pub fn freeze(&self) {
         unsafe {
@@ -99,6 +165,22 @@ impl Path {
         }
     }
 
+    /// Compute the bounding box of a path.
+    ///
+    /// # Returns
+    ///
+    ///
+    /// ## `min_x`
+    /// return location for minimum x coordinate
+    ///
+    /// ## `max_x`
+    /// return location for maximum x coordinate
+    ///
+    /// ## `min_y`
+    /// return location for minimum y coordinate
+    ///
+    /// ## `max_y`
+    /// return location for maximum y coordinate
     #[doc(alias = "gegl_path_get_bounds")]
     #[doc(alias = "get_bounds")]
     pub fn bounds(&self) -> (f64, f64, f64, f64) {
@@ -118,6 +200,11 @@ impl Path {
     //    unsafe { TODO: call ffi:gegl_path_get_flat_path() }
     //}
 
+    /// Returns the total length of the path.
+    ///
+    /// # Returns
+    ///
+    /// the length of the path.
     #[doc(alias = "gegl_path_get_length")]
     #[doc(alias = "get_length")]
     pub fn length(&self) -> f64 {
@@ -126,6 +213,11 @@ impl Path {
         }
     }
 
+    /// Retrieves the number of nodes in the path.
+    ///
+    /// # Returns
+    ///
+    /// the number of nodes in the path.
     #[doc(alias = "gegl_path_get_n_nodes")]
     #[doc(alias = "get_n_nodes")]
     pub fn n_nodes(&self) -> i32 {
@@ -151,6 +243,9 @@ impl Path {
     //    unsafe { TODO: call ffi:gegl_path_insert_node() }
     //}
 
+    /// Check if the path contains any nodes.
+    ///
+    /// Returns TRUE if the path has no nodes.
     #[doc(alias = "gegl_path_is_empty")]
     pub fn is_empty(&self) -> bool {
         unsafe {
@@ -158,6 +253,10 @@ impl Path {
         }
     }
 
+    /// Parses `instructions` and appends corresponding nodes to path (call
+    /// `gegl_path_clean()` first if you want to replace the existing path.
+    /// ## `instructions`
+    /// a string describing a path.
     #[doc(alias = "gegl_path_parse_string")]
     pub fn parse_string(&self, instructions: &str) {
         unsafe {
@@ -165,6 +264,9 @@ impl Path {
         }
     }
 
+    /// Removes the node number `pos` in `self`.
+    /// ## `pos`
+    /// a node in the path.
     #[doc(alias = "gegl_path_remove_node")]
     pub fn remove_node(&self, pos: i32) {
         unsafe {
@@ -177,6 +279,12 @@ impl Path {
     //    unsafe { TODO: call ffi:gegl_path_replace_node() }
     //}
 
+    /// Set the transformation matrix of the path.
+    ///
+    /// The path is transformed through this matrix when being evaluated,
+    /// causing the calculated positions and length to be changed by the transform.
+    /// ## `matrix`
+    /// a [`Matrix3`][crate::Matrix3] to copy the matrix from
     #[doc(alias = "gegl_path_set_matrix")]
     pub fn set_matrix(&self, matrix: &mut Matrix3) {
         unsafe {
@@ -184,6 +292,7 @@ impl Path {
         }
     }
 
+    /// Restart firing signals (unless the path has been frozen multiple times).
     #[doc(alias = "gegl_path_thaw")]
     pub fn thaw(&self) {
         unsafe {
@@ -191,6 +300,12 @@ impl Path {
         }
     }
 
+    /// Serialize the paths nodes to a string.
+    ///
+    /// # Returns
+    ///
+    /// return a string with instructions describing the string you
+    /// need to free this with `g_free()`.
     #[doc(alias = "gegl_path_to_string")]
     #[doc(alias = "to_string")]
     pub fn to_str(&self) -> glib::GString {
@@ -204,6 +319,15 @@ impl Path {
     //    unsafe { TODO: call ffi:gegl_path_add_flattener() }
     //}
 
+    /// Adds a new type to the path system, FIXME this should probably
+    /// return something on registration conflicts, for now it expects
+    /// all registered paths to be aware of each other.
+    /// ## `type_`
+    /// a gchar to recognize in path descriptions.
+    /// ## `items`
+    /// the number of floating point data items the instruction takes
+    /// ## `description`
+    /// a human readable description of this entry
     #[doc(alias = "gegl_path_add_type")]
     pub fn add_type(type_: glib::Char, items: i32, description: &str) {
         assert_initialized_main_thread!();

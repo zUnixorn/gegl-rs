@@ -8,6 +8,17 @@ use glib::{prelude::*,signal::{connect_raw, SignalHandlerId},translate::*};
 use std::{boxed::Box as Box_};
 
 glib::wrapper! {
+    ///
+    ///
+    /// ## Properties
+    ///
+    ///
+    /// #### `string`
+    ///  Readable | Writeable
+    ///
+    /// # Implements
+    ///
+    /// [`ColorExt`][trait@crate::prelude::ColorExt]
     #[doc(alias = "GeglColor")]
     pub struct Color(Object<ffi::GeglColor, ffi::GeglColorClass>);
 
@@ -20,6 +31,11 @@ impl Color {
         pub const NONE: Option<&'static Color> = None;
     
 
+    /// Creates a new [`Color`][crate::Color].
+    ///
+    /// Returns the newly created [`Color`][crate::Color].
+    /// ## `string`
+    /// a string describing the color to be created.
     #[doc(alias = "gegl_color_new")]
     pub fn new(string: &str) -> Color {
         assert_initialized_main_thread!();
@@ -70,7 +86,17 @@ assert_initialized_main_thread!();
     self.builder.build() }
 }
 
+/// Trait containing all [`struct@Color`] methods.
+///
+/// # Implementors
+///
+/// [`Color`][struct@crate::Color]
 pub trait ColorExt: IsA<Color> + 'static {
+    /// Creates a copy of `self`.
+    ///
+    /// # Returns
+    ///
+    /// A new copy of `self`.
     #[doc(alias = "gegl_color_duplicate")]
 #[must_use]
     fn duplicate(&self) -> Option<Color> {
@@ -79,6 +105,14 @@ pub trait ColorExt: IsA<Color> + 'static {
         }
     }
 
+    /// Get the component values of the color in `format`.
+    /// ## `format`
+    /// A Babl pointer
+    ///
+    /// # Returns
+    ///
+    /// The color components
+    /// If value format not supported return NULL and components_length set to 0.
     #[doc(alias = "gegl_color_get_components")]
     #[doc(alias = "get_components")]
     fn components(&self, format: &mut glib::Value) -> Vec<f64> {
@@ -95,6 +129,23 @@ pub trait ColorExt: IsA<Color> + 'static {
     //    unsafe { TODO: call ffi:gegl_color_get_pixel() }
     //}
 
+    /// Retrieves the current set color as linear light non premultipled RGBA data,
+    /// any of the return pointers can be omitted.
+    ///
+    /// # Returns
+    ///
+    ///
+    /// ## `red`
+    /// red return location.
+    ///
+    /// ## `green`
+    /// green return location.
+    ///
+    /// ## `blue`
+    /// blue return location.
+    ///
+    /// ## `alpha`
+    /// alpha return location.
     #[doc(alias = "gegl_color_get_rgba")]
     #[doc(alias = "get_rgba")]
     fn rgba(&self) -> (f64, f64, f64, f64) {
@@ -108,6 +159,11 @@ pub trait ColorExt: IsA<Color> + 'static {
         }
     }
 
+    /// Set the color using the component values as `format`.
+    /// ## `format`
+    /// A Babl pointer
+    /// ## `components`
+    /// The color components.
     #[doc(alias = "gegl_color_set_components")]
     fn set_components(&self, format: &mut glib::Value, components: &[f64]) {
         let components_length = components.len() as _;
@@ -121,6 +177,15 @@ pub trait ColorExt: IsA<Color> + 'static {
     //    unsafe { TODO: call ffi:gegl_color_set_pixel() }
     //}
 
+    /// Set color as linear light non premultipled RGBA data
+    /// ## `red`
+    /// red value
+    /// ## `green`
+    /// green value
+    /// ## `blue`
+    /// blue value
+    /// ## `alpha`
+    /// alpha value
     #[doc(alias = "gegl_color_set_rgba")]
     fn set_rgba(&self, red: f64, green: f64, blue: f64, alpha: f64) {
         unsafe {

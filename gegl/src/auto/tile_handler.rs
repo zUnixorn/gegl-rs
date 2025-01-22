@@ -8,6 +8,17 @@ use glib::{prelude::*,signal::{connect_raw, SignalHandlerId},translate::*};
 use std::{boxed::Box as Box_};
 
 glib::wrapper! {
+    ///
+    ///
+    /// ## Properties
+    ///
+    ///
+    /// #### `source`
+    ///  Readable | Writeable | Construct
+    ///
+    /// # Implements
+    ///
+    /// [`TileHandlerExt`][trait@crate::prelude::TileHandlerExt], [`TileSourceExt`][trait@crate::prelude::TileSourceExt]
     #[doc(alias = "GeglTileHandler")]
     pub struct TileHandler(Object<ffi::GeglTileHandler, ffi::GeglTileHandlerClass>) @extends TileSource;
 
@@ -56,6 +67,11 @@ assert_initialized_main_thread!();
     self.builder.build() }
 }
 
+/// Trait containing all [`struct@TileHandler`] methods.
+///
+/// # Implementors
+///
+/// [`Buffer`][struct@crate::Buffer], [`TileHandler`][struct@crate::TileHandler]
 pub trait TileHandlerExt: IsA<TileHandler> + 'static {
     //#[doc(alias = "gegl_tile_handler_create_tile")]
     //fn create_tile(&self, x: i32, y: i32, z: i32) -> /*Ignored*/Option<Tile> {

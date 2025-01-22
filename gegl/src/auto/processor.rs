@@ -8,6 +8,25 @@ use glib::{prelude::*,signal::{connect_raw, SignalHandlerId},translate::*};
 use std::{boxed::Box as Box_};
 
 glib::wrapper! {
+    ///
+    ///
+    /// ## Properties
+    ///
+    ///
+    /// #### `chunksize`
+    ///  Readable | Writeable | Construct Only
+    ///
+    ///
+    /// #### `node`
+    ///  Writeable | Construct
+    ///
+    ///
+    /// #### `progress`
+    ///  Readable | Writeable
+    ///
+    ///
+    /// #### `rectangle`
+    ///  Readable | Writeable
     #[doc(alias = "GeglProcessor")]
     pub struct Processor(Object<ffi::GeglProcessor>);
 
@@ -26,6 +45,13 @@ impl Processor {
             }
         
 
+    /// Returns the (cache) buffer the processor is rendering into, another way of
+    /// getting to the same pixel data is calling gegl_node_blit with flags
+    /// indicating that we want caching and accept dirty data.
+    ///
+    /// # Returns
+    ///
+    /// the [`Buffer`][crate::Buffer] rendered into.
     #[doc(alias = "gegl_processor_get_buffer")]
     #[doc(alias = "get_buffer")]
     pub fn buffer(&self) -> Option<Buffer> {
@@ -41,6 +67,10 @@ impl Processor {
         }
     }
 
+    /// Change the rectangle a [`Processor`][crate::Processor] is working on.
+    /// ## `rectangle`
+    /// the new [`Rectangle`][crate::Rectangle] the processor shold work on or NULL
+    /// to make it work on all data in the buffer.
     #[doc(alias = "gegl_processor_set_rectangle")]
     #[doc(alias = "rectangle")]
     pub fn set_rectangle(&self, rectangle: &Rectangle) {
@@ -56,6 +86,23 @@ impl Processor {
         }
     }
 
+    /// Do an iteration of work for the processor.
+    ///
+    /// Returns TRUE if there is more work to be done.
+    ///
+    /// ---
+    /// GeglProcessor *processor = gegl_node_new_processor (node, &roi);
+    /// double progress;
+    ///
+    /// while (gegl_processor_work (processor, &progress))
+    ///  g_warning ("`f`%% complete", progress);
+    /// g_object_unref (processor);
+    ///
+    /// # Returns
+    ///
+    ///
+    /// ## `progress`
+    /// a location to store the (estimated) percentage complete.
     #[doc(alias = "gegl_processor_work")]
     pub fn work(&self) -> Option<f64> {
         unsafe {

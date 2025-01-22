@@ -7,6 +7,7 @@ use crate::{ffi};
 use glib::{prelude::*,translate::*};
 
 glib::wrapper! {
+    ///
     #[doc(alias = "GeglParamCurve")]
     pub struct ParamCurve(Shared<ffi::GeglParamCurve>);
 

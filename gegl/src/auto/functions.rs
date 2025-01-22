@@ -22,6 +22,7 @@ use glib::{translate::*};
 //    unsafe { TODO: call ffi:gegl_calloc() }
 //}
 
+/// Disable OpenCL
 #[doc(alias = "gegl_cl_disable")]
 pub fn cl_disable() {
     assert_initialized_main_thread!();
@@ -30,6 +31,12 @@ pub fn cl_disable() {
     }
 }
 
+/// Initialize and enable OpenCL, calling this function again
+/// will re-enable OpenCL if it has been disabled.
+///
+/// # Returns
+///
+/// True if OpenCL was initialized
 #[doc(alias = "gegl_cl_init")]
 pub fn cl_init() -> Result<(), glib::Error> {
     assert_initialized_main_thread!();
@@ -41,6 +48,11 @@ pub fn cl_init() -> Result<(), glib::Error> {
     }
 }
 
+/// Check if OpenCL is enabled.
+///
+/// # Returns
+///
+/// True if OpenCL is initialized and enabled
 #[doc(alias = "gegl_cl_is_accelerated")]
 pub fn cl_is_accelerated() -> bool {
     assert_initialized_main_thread!();
@@ -49,6 +61,12 @@ pub fn cl_is_accelerated() -> bool {
     }
 }
 
+/// Returns a GeglConfig object with properties that can be manipulated to control
+/// GEGLs behavior.
+///
+/// # Returns
+///
+/// a [`Config`][crate::Config]
 #[doc(alias = "gegl_config")]
 pub fn config() -> Config {
     assert_initialized_main_thread!();
@@ -62,6 +80,9 @@ pub fn config() -> Config {
 //    unsafe { TODO: call ffi:gegl_create_chain() }
 //}
 
+/// Call this function when you're done using GEGL. It will clean up
+/// caches and write/dump debug information if the correct debug flags
+/// are set.
 #[doc(alias = "gegl_exit")]
 pub fn exit() {
     assert_initialized_main_thread!();
@@ -80,6 +101,14 @@ pub fn exit() {
 //    unsafe { TODO: call ffi:gegl_filter_op_valist() }
 //}
 
+/// Returns a value sutable to pass to the GeglBuffer constructor
+/// or any other property that expects a Babl format.
+/// ## `format_name`
+/// A Babl format name, e.g. "RGBA float"
+///
+/// # Returns
+///
+/// the format pointer
 #[doc(alias = "gegl_format")]
 pub fn format(format_name: &str) -> Option<glib::Value> {
     assert_initialized_main_thread!();
@@ -88,6 +117,12 @@ pub fn format(format_name: &str) -> Option<glib::Value> {
     }
 }
 
+/// ## `format`
+/// A Babl pointer
+///
+/// # Returns
+///
+/// the format name
 #[doc(alias = "gegl_format_get_name")]
 pub fn format_get_name(format: &mut glib::Value) -> Option<glib::GString> {
     assert_initialized_main_thread!();
@@ -101,6 +136,20 @@ pub fn format_get_name(format: &mut glib::Value) -> Option<glib::GString> {
 //    unsafe { TODO: call ffi:gegl_free() }
 //}
 
+/// This function fetches the version of the GEGL library being used by
+/// the running process.
+///
+/// # Returns
+///
+///
+/// ## `major`
+/// a pointer to a int where the major version number will be stored
+///
+/// ## `minor`
+/// ditto for the minor version number
+///
+/// ## `micro`
+/// ditto for the micro version number
 #[doc(alias = "gegl_get_version")]
 #[doc(alias = "get_version")]
 pub fn version() -> (i32, i32, i32) {
@@ -124,6 +173,13 @@ pub fn version() -> (i32, i32, i32) {
 //    unsafe { TODO: call ffi:gegl_graph_dump_request() }
 //}
 
+/// ## `operation_type`
+/// the name of the operation
+///
+/// # Returns
+///
+/// A boolean telling whether the operation is present or not. This
+/// also returns true for any compat-name registered by operations.
 #[doc(alias = "gegl_has_operation")]
 pub fn has_operation(operation_type: &str) -> bool {
     assert_initialized_main_thread!();
@@ -145,6 +201,25 @@ pub fn is_main_thread() -> bool {
     }
 }
 
+///
+/// # Returns
+///
+/// An
+/// alphabetically sorted array of available operation names. This excludes any
+/// compat-name registered by operations. The list should be freed with g_free
+/// after use.
+/// ---
+/// gchar **operations;
+/// guint n_operations;
+/// gint i;
+///
+/// operations = gegl_list_operations (&n_operations);
+/// g_print ("Available operations:\n");
+/// for (i=0; i < n_operations; i++)
+///  {
+///  g_print ("\t`s`\n", operations[i]);
+///  }
+/// g_free (operations);
 #[doc(alias = "gegl_list_operations")]
 pub fn list_operations() -> Vec<glib::GString> {
     assert_initialized_main_thread!();
@@ -155,6 +230,9 @@ pub fn list_operations() -> Vec<glib::GString> {
     }
 }
 
+/// Load all gegl modules found in the given directory.
+/// ## `path`
+/// the directory to load modules from
 #[doc(alias = "gegl_load_module_directory")]
 pub fn load_module_directory(path: &str) {
     assert_initialized_main_thread!();
@@ -178,6 +256,12 @@ pub fn load_module_directory(path: &str) {
 //    unsafe { TODO: call ffi:gegl_memset_pattern() }
 //}
 
+/// Distributes the execution of a function across multiple threads,
+/// by calling it with a different index on each thread.
+/// ## `max_n`
+/// the maximal number of threads to use
+/// ## `func`
+/// the function to call
 #[doc(alias = "gegl_parallel_distribute")]
 pub fn parallel_distribute<P: FnMut(i32, i32)>(max_n: i32, func: P) {
     assert_initialized_main_thread!();
@@ -193,6 +277,18 @@ pub fn parallel_distribute<P: FnMut(i32, i32)>(max_n: i32, func: P) {
     }
 }
 
+/// Distributes the processing of a planar data-structure across
+/// multiple threads, by calling the given function with different
+/// sub-areas on different threads.
+/// ## `area`
+/// the area to process
+/// ## `thread_cost`
+/// the cost of using each additional thread, relative
+///  to the cost of processing a single data element
+/// ## `split_strategy`
+/// the strategy to use for dividing the area
+/// ## `func`
+/// the function to call
 #[doc(alias = "gegl_parallel_distribute_area")]
 pub fn parallel_distribute_area<P: FnMut(&Rectangle)>(area: &Rectangle, thread_cost: f64, split_strategy: SplitStrategy, func: P) {
     assert_initialized_main_thread!();
@@ -209,6 +305,16 @@ pub fn parallel_distribute_area<P: FnMut(&Rectangle)>(area: &Rectangle, thread_c
     }
 }
 
+/// Distributes the processing of a linear data-structure across
+/// multiple threads, by calling the given function with different
+/// sub-ranges on different threads.
+/// ## `size`
+/// the total size of the data
+/// ## `thread_cost`
+/// the cost of using each additional thread, relative
+///  to the cost of processing a single data element
+/// ## `func`
+/// the function to call
 #[doc(alias = "gegl_parallel_distribute_range")]
 pub fn parallel_distribute_range<P: FnMut(usize, usize)>(size: usize, thread_cost: f64, func: P) {
     assert_initialized_main_thread!();
@@ -224,6 +330,19 @@ pub fn parallel_distribute_range<P: FnMut(usize, usize)>(size: usize, thread_cos
     }
 }
 
+/// Creates a new [`glib::ParamSpec`][crate::glib::ParamSpec] instance specifying a [`AudioFragment`][crate::AudioFragment] property.
+/// ## `name`
+/// canonical name of the property specified
+/// ## `nick`
+/// nick name for the property specified
+/// ## `blurb`
+/// description of the property specified
+/// ## `flags`
+/// flags for the property specified
+///
+/// # Returns
+///
+/// a newly created parameter specification
 #[doc(alias = "gegl_param_spec_audio_fragment")]
 pub fn param_spec_audio_fragment(name: &str, nick: &str, blurb: &str, flags: glib::ParamFlags) -> Option<glib::ParamSpec> {
     assert_initialized_main_thread!();
@@ -232,6 +351,21 @@ pub fn param_spec_audio_fragment(name: &str, nick: &str, blurb: &str, flags: gli
     }
 }
 
+/// Creates a new [`glib::ParamSpec`][crate::glib::ParamSpec] instance specifying a [`Color`][crate::Color] property.
+/// ## `name`
+/// canonical name of the property specified
+/// ## `nick`
+/// nick name for the property specified
+/// ## `blurb`
+/// description of the property specified
+/// ## `default_color_string`
+/// the default value for the property specified
+/// ## `flags`
+/// flags for the property specified
+///
+/// # Returns
+///
+/// a newly created parameter specification
 #[doc(alias = "gegl_param_spec_color_from_string")]
 pub fn param_spec_color_from_string(name: &str, nick: &str, blurb: &str, default_color_string: &str, flags: glib::ParamFlags) -> Option<glib::ParamSpec> {
     assert_initialized_main_thread!();
@@ -245,6 +379,31 @@ pub fn param_spec_color_from_string(name: &str, nick: &str, blurb: &str, default
 //    unsafe { TODO: call ffi:gegl_param_spec_curve() }
 //}
 
+/// Creates a new `GeglParamSpecDouble` instance.
+/// ## `name`
+/// canonical name of the property specified
+/// ## `nick`
+/// nick name for the property specified
+/// ## `blurb`
+/// description of the property specified
+/// ## `minimum`
+/// minimum value for the property specified
+/// ## `maximum`
+/// maximum value for the property specified
+/// ## `default_value`
+/// default value for the property specified
+/// ## `ui_minimum`
+/// minimum value a user should be allowed to input
+/// ## `ui_maximum`
+/// maximum value a user should be allowed to input
+/// ## `ui_gamma`
+/// the gamma that should be used when adjusting the value
+/// ## `flags`
+/// flags for the property specified
+///
+/// # Returns
+///
+/// a newly created parameter specification
 #[doc(alias = "gegl_param_spec_double")]
 pub fn param_spec_double(name: &str, nick: &str, blurb: &str, minimum: f64, maximum: f64, default_value: f64, ui_minimum: f64, ui_maximum: f64, ui_gamma: f64, flags: glib::ParamFlags) -> Option<glib::ParamSpec> {
     assert_initialized_main_thread!();
@@ -253,6 +412,23 @@ pub fn param_spec_double(name: &str, nick: &str, blurb: &str, minimum: f64, maxi
     }
 }
 
+/// Creates a new `GeglParamSpecEnum` instance.
+/// ## `name`
+/// canonical name of the property specified
+/// ## `nick`
+/// nick name for the property specified
+/// ## `blurb`
+/// description of the property specified
+/// ## `enum_type`
+/// the enum type to get valid values from
+/// ## `default_value`
+/// default value for the property specified
+/// ## `flags`
+/// flags for the property specified
+///
+/// # Returns
+///
+/// a newly created parameter specification
 #[doc(alias = "gegl_param_spec_enum")]
 pub fn param_spec_enum(name: &str, nick: &str, blurb: &str, enum_type: glib::types::Type, default_value: i32, flags: glib::ParamFlags) -> Option<glib::ParamSpec> {
     assert_initialized_main_thread!();
@@ -261,6 +437,25 @@ pub fn param_spec_enum(name: &str, nick: &str, blurb: &str, enum_type: glib::typ
     }
 }
 
+/// Creates a new `GeglParamSpecFilePath` instance.
+/// ## `name`
+/// canonical name of the property specified
+/// ## `nick`
+/// nick name for the property specified
+/// ## `blurb`
+/// description of the property specified
+/// ## `no_validate`
+/// true if the string should be validated with g_utf8_validate
+/// ## `null_ok`
+/// true if the string can be NULL
+/// ## `default_value`
+/// default value for the property specified
+/// ## `flags`
+/// flags for the property specified
+///
+/// # Returns
+///
+/// a newly created parameter specification
 #[doc(alias = "gegl_param_spec_file_path")]
 pub fn param_spec_file_path(name: &str, nick: &str, blurb: &str, no_validate: bool, null_ok: bool, default_value: &str, flags: glib::ParamFlags) -> Option<glib::ParamSpec> {
     assert_initialized_main_thread!();
@@ -269,6 +464,19 @@ pub fn param_spec_file_path(name: &str, nick: &str, blurb: &str, no_validate: bo
     }
 }
 
+/// Creates a new `GeglParamSpecFormat` instance specifying a Babl format.
+/// ## `name`
+/// canonical name of the property specified
+/// ## `nick`
+/// nick name for the property specified
+/// ## `blurb`
+/// description of the property specified
+/// ## `flags`
+/// flags for the property specified
+///
+/// # Returns
+///
+/// a newly created parameter specification
 #[doc(alias = "gegl_param_spec_format")]
 pub fn param_spec_format(name: &str, nick: &str, blurb: &str, flags: glib::ParamFlags) -> Option<glib::ParamSpec> {
     assert_initialized_main_thread!();
@@ -277,6 +485,31 @@ pub fn param_spec_format(name: &str, nick: &str, blurb: &str, flags: glib::Param
     }
 }
 
+/// Creates a new `GeglParamSpecInt` instance.
+/// ## `name`
+/// canonical name of the property specified
+/// ## `nick`
+/// nick name for the property specified
+/// ## `blurb`
+/// description of the property specified
+/// ## `minimum`
+/// minimum value for the property specified
+/// ## `maximum`
+/// maximum value for the property specified
+/// ## `default_value`
+/// default value for the property specified
+/// ## `ui_minimum`
+/// minimum value a user should be allowed to input
+/// ## `ui_maximum`
+/// maximum value a user should be allowed to input
+/// ## `ui_gamma`
+/// the gamma that should be used when adjusting the value
+/// ## `flags`
+/// flags for the property specified
+///
+/// # Returns
+///
+/// a newly created parameter specification
 #[doc(alias = "gegl_param_spec_int")]
 pub fn param_spec_int(name: &str, nick: &str, blurb: &str, minimum: i32, maximum: i32, default_value: i32, ui_minimum: i32, ui_maximum: i32, ui_gamma: f64, flags: glib::ParamFlags) -> Option<glib::ParamSpec> {
     assert_initialized_main_thread!();
@@ -285,6 +518,21 @@ pub fn param_spec_int(name: &str, nick: &str, blurb: &str, minimum: i32, maximum
     }
 }
 
+/// Creates a new [`glib::ParamSpec`][crate::glib::ParamSpec] instance specifying a [`Path`][crate::Path] property.
+/// ## `name`
+/// canonical name of the property specified
+/// ## `nick`
+/// nick name for the property specified
+/// ## `blurb`
+/// description of the property specified
+/// ## `default_path`
+/// the default value for the property specified
+/// ## `flags`
+/// flags for the property specified
+///
+/// # Returns
+///
+/// a newly created parameter specification
 #[doc(alias = "gegl_param_spec_path")]
 pub fn param_spec_path(name: &str, nick: &str, blurb: &str, default_path: &Path, flags: glib::ParamFlags) -> Option<glib::ParamSpec> {
     skip_assert_initialized!();
@@ -293,6 +541,19 @@ pub fn param_spec_path(name: &str, nick: &str, blurb: &str, default_path: &Path,
     }
 }
 
+/// Creates a new `GeglParamSpecSeed` instance specifying an integer random seed.
+/// ## `name`
+/// canonical name of the property specified
+/// ## `nick`
+/// nick name for the property specified
+/// ## `blurb`
+/// description of the property specified
+/// ## `flags`
+/// flags for the property specified
+///
+/// # Returns
+///
+/// a newly created parameter specification
 #[doc(alias = "gegl_param_spec_seed")]
 pub fn param_spec_seed(name: &str, nick: &str, blurb: &str, flags: glib::ParamFlags) -> Option<glib::ParamSpec> {
     assert_initialized_main_thread!();
@@ -301,6 +562,25 @@ pub fn param_spec_seed(name: &str, nick: &str, blurb: &str, flags: glib::ParamFl
     }
 }
 
+/// Creates a new `GeglParamSpecString` instance.
+/// ## `name`
+/// canonical name of the property specified
+/// ## `nick`
+/// nick name for the property specified
+/// ## `blurb`
+/// description of the property specified
+/// ## `no_validate`
+/// true if the string should be validated with g_utf8_validate
+/// ## `null_ok`
+/// true if the string can be NULL
+/// ## `default_value`
+/// default value for the property specified
+/// ## `flags`
+/// flags for the property specified
+///
+/// # Returns
+///
+/// a newly created parameter specification
 #[doc(alias = "gegl_param_spec_string")]
 pub fn param_spec_string(name: &str, nick: &str, blurb: &str, no_validate: bool, null_ok: bool, default_value: &str, flags: glib::ParamFlags) -> Option<glib::ParamSpec> {
     assert_initialized_main_thread!();
@@ -309,6 +589,25 @@ pub fn param_spec_string(name: &str, nick: &str, blurb: &str, no_validate: bool,
     }
 }
 
+/// Creates a new `GeglParamSpecUri` instance.
+/// ## `name`
+/// canonical name of the property specified
+/// ## `nick`
+/// nick name for the property specified
+/// ## `blurb`
+/// description of the property specified
+/// ## `no_validate`
+/// true if the string should be validated with g_utf8_validate
+/// ## `null_ok`
+/// true if the string can be NULL
+/// ## `default_value`
+/// default value for the property specified
+/// ## `flags`
+/// flags for the property specified
+///
+/// # Returns
+///
+/// a newly created parameter specification
 #[doc(alias = "gegl_param_spec_uri")]
 pub fn param_spec_uri(name: &str, nick: &str, blurb: &str, no_validate: bool, null_ok: bool, default_value: &str, flags: glib::ParamFlags) -> Option<glib::ParamSpec> {
     assert_initialized_main_thread!();
@@ -327,6 +626,8 @@ pub fn param_spec_uri(name: &str, nick: &str, blurb: &str, no_validate: bool, nu
 //    unsafe { TODO: call ffi:gegl_render_op_valist() }
 //}
 
+/// Resets the cumulative data gathered by the [`Stats`][crate::Stats] object returned
+/// by [`stats()`][crate::stats()].
 #[doc(alias = "gegl_reset_stats")]
 pub fn reset_stats() {
     assert_initialized_main_thread!();
@@ -355,6 +656,12 @@ pub fn reset_stats() {
 //    unsafe { TODO: call ffi:gegl_serialize() }
 //}
 
+/// Returns a GeglStats object with properties that can be read to monitor
+/// GEGL statistics.
+///
+/// # Returns
+///
+/// a [`Stats`][crate::Stats]
 #[doc(alias = "gegl_stats")]
 pub fn stats() -> Option<Stats> {
     assert_initialized_main_thread!();

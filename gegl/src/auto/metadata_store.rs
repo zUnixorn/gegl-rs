@@ -8,6 +8,151 @@ use glib::{prelude::*,signal::{connect_raw, SignalHandlerId},translate::*};
 use std::{boxed::Box as Box_};
 
 glib::wrapper! {
+    ///
+    ///
+    /// This is an Abstract Base Class, you cannot instantiate it.
+    ///
+    /// ## Properties
+    ///
+    ///
+    /// #### `artist`
+    ///  Name of image creator.
+    ///
+    /// Readable | Writeable
+    ///
+    ///
+    /// #### `comment`
+    ///  Miscellaneous comment; conversion from GIF comment.
+    ///
+    /// Readable | Writeable
+    ///
+    ///
+    /// #### `copyright`
+    ///  Copyright notice.
+    ///
+    /// Readable | Writeable
+    ///
+    ///
+    /// #### `description`
+    ///  Description of image (possibly long).
+    ///
+    /// Readable | Writeable
+    ///
+    ///
+    /// #### `disclaimer`
+    ///  Legal disclaimer.
+    ///
+    /// Readable | Writeable
+    ///
+    ///
+    /// #### `file-module-name`
+    ///  Current file loader/saver module name. Valid only while a [`Metadata`][crate::Metadata]
+    /// mapping is registered. This property is mainly provided for use in signal
+    /// handlers.
+    ///
+    /// Readable
+    ///
+    ///
+    /// #### `resolution-unit`
+    ///  A [`ResolutionUnit`][crate::ResolutionUnit] specifying units for the image resolution (density).
+    ///
+    /// Readable | Writeable
+    ///
+    ///
+    /// #### `resolution-x`
+    ///  X resolution or density in dots per unit.
+    ///
+    /// Readable | Writeable
+    ///
+    ///
+    /// #### `resolution-y`
+    ///  Y resolution or density in dots per unit.
+    ///
+    /// Readable | Writeable
+    ///
+    ///
+    /// #### `software`
+    ///  Software used to create the image.
+    ///
+    /// Readable | Writeable
+    ///
+    ///
+    /// #### `source`
+    ///  Device used to create the image.
+    ///
+    /// Readable | Writeable
+    ///
+    ///
+    /// #### `timestamp`
+    ///  Time of original image creation.
+    ///
+    /// Readable | Writeable
+    ///
+    ///
+    /// #### `title`
+    ///  Short (one line) title or caption for image.
+    ///
+    /// Readable | Writeable
+    ///
+    ///
+    /// #### `warning`
+    ///  Warning of nature of content.
+    ///
+    /// Readable | Writeable
+    ///
+    /// ## Signals
+    ///
+    ///
+    /// #### `changed`
+    ///  `::changed` is emitted when a metadata value is changed. This is analogous
+    /// to the `GObject::notify` signal.
+    ///
+    /// Detailed
+    ///
+    ///
+    /// #### `generate-value`
+    ///  If a signal handler is connected to `::generate-value` a signal is emitted
+    /// when the file module accesses a value using `gegl_metadata_get_value()`.
+    /// The signal handler must generate a value of the type specified in the pspec
+    /// argument. The signal handler's return value indicates the success of the
+    /// operation.
+    ///
+    /// If no handler is connected the mapped metadata value is accessed normally,
+    ///
+    /// Detailed
+    ///
+    ///
+    /// #### `mapped`
+    ///  `::mapped` is emitted after a file module registers a mapping and before
+    /// other processing takes place. An application may respond to the signal by
+    /// registering additional mappings or overriding existing values, for example
+    /// it might override the TIFF ImageDescription tag to format multiple metadata
+    /// values into the description.
+    ///
+    ///
+    ///
+    ///
+    /// #### `parse-value`
+    ///  If a signal handler is connected to `::parse-value` a signal is emitted when
+    /// the file module accesses a value using `gegl_metadata_set_value()`. The
+    /// signal handler should parse the value supplied in the [`glib::Value`][crate::glib::Value] and may set
+    /// any number of metadata values using [`MetadataStoreExt::set_value()`][crate::prelude::MetadataStoreExt::set_value()].
+    ///
+    /// If no handler is connected the mapped metadata value is set normally,
+    ///
+    /// Detailed
+    ///
+    ///
+    /// #### `unmapped`
+    ///  `::unmapped` is emitted when a file module tries to look up an unmapped
+    /// metadata name. When the handler returns a second attempt is made to look
+    /// up the metadata.
+    ///
+    ///
+    ///
+    /// # Implements
+    ///
+    /// [`MetadataStoreExt`][trait@crate::prelude::MetadataStoreExt], [`MetadataExt`][trait@crate::prelude::MetadataExt]
     #[doc(alias = "GeglMetadataStore")]
     pub struct MetadataStore(Object<ffi::GeglMetadataStore, ffi::GeglMetadataStoreClass>) @implements Metadata;
 
@@ -21,7 +166,17 @@ impl MetadataStore {
     
 }
 
+/// Trait containing all [`struct@MetadataStore`] methods.
+///
+/// # Implementors
+///
+/// [`MetadataHash`][struct@crate::MetadataHash], [`MetadataStore`][struct@crate::MetadataStore]
 pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
+    /// Get name of image creator.
+    ///
+    /// # Returns
+    ///
+    /// Artist or [`None`] if not set
     #[doc(alias = "gegl_metadata_store_get_artist")]
     #[doc(alias = "get_artist")]
     fn artist(&self) -> Option<glib::GString> {
@@ -30,6 +185,11 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Get the comment.
+    ///
+    /// # Returns
+    ///
+    /// Comment or [`None`] if not set
     #[doc(alias = "gegl_metadata_store_get_comment")]
     #[doc(alias = "get_comment")]
     fn comment(&self) -> Option<glib::GString> {
@@ -38,6 +198,11 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Get the copyright notice.
+    ///
+    /// # Returns
+    ///
+    /// Copyright or [`None`] if not set
     #[doc(alias = "gegl_metadata_store_get_copyright")]
     #[doc(alias = "get_copyright")]
     fn copyright(&self) -> Option<glib::GString> {
@@ -46,6 +211,11 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Get description of image.
+    ///
+    /// # Returns
+    ///
+    /// Description or [`None`] if not set
     #[doc(alias = "gegl_metadata_store_get_description")]
     #[doc(alias = "get_description")]
     fn description(&self) -> Option<glib::GString> {
@@ -54,6 +224,11 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Get the legal disclaimer.
+    ///
+    /// # Returns
+    ///
+    /// Disclaimer or [`None`] if not set
     #[doc(alias = "gegl_metadata_store_get_disclaimer")]
     #[doc(alias = "get_disclaimer")]
     fn disclaimer(&self) -> Option<glib::GString> {
@@ -62,6 +237,11 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Return the name registered by the current file module.
+    ///
+    /// # Returns
+    ///
+    /// Current file module name or [`None`].
     #[doc(alias = "gegl_metadata_store_get_file_module_name")]
     #[doc(alias = "get_file_module_name")]
     #[doc(alias = "file-module-name")]
@@ -71,6 +251,11 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Get the units used for resolution.
+    ///
+    /// # Returns
+    ///
+    /// a [`ResolutionUnit`][crate::ResolutionUnit].
     #[doc(alias = "gegl_metadata_store_get_resolution_unit")]
     #[doc(alias = "get_resolution_unit")]
     #[doc(alias = "resolution-unit")]
@@ -80,6 +265,11 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Get the X resolution or density in dots per unit.
+    ///
+    /// # Returns
+    ///
+    /// X resolution
     #[doc(alias = "gegl_metadata_store_get_resolution_x")]
     #[doc(alias = "get_resolution_x")]
     #[doc(alias = "resolution-x")]
@@ -89,6 +279,11 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Get the Y resolution or density in dots per unit.
+    ///
+    /// # Returns
+    ///
+    /// Y resolution
     #[doc(alias = "gegl_metadata_store_get_resolution_y")]
     #[doc(alias = "get_resolution_y")]
     #[doc(alias = "resolution-y")]
@@ -98,6 +293,11 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Get software used to create the image.
+    ///
+    /// # Returns
+    ///
+    /// Software or [`None`] if not set
     #[doc(alias = "gegl_metadata_store_get_software")]
     #[doc(alias = "get_software")]
     fn software(&self) -> Option<glib::GString> {
@@ -106,6 +306,11 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Get device used to create the image.
+    ///
+    /// # Returns
+    ///
+    /// source or [`None`] if not set
     #[doc(alias = "gegl_metadata_store_get_source")]
     #[doc(alias = "get_source")]
     fn source(&self) -> Option<glib::GString> {
@@ -114,6 +319,15 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// A slightly more efficient version of `gegl_metadata_store_get_value()`
+    /// for string values avoiding a duplication. Otherwise it behaves the same
+    /// `gegl_metadata_store_get_value()`.
+    /// ## `name`
+    /// Metadata name
+    ///
+    /// # Returns
+    ///
+    /// String or [`None`].
     #[doc(alias = "gegl_metadata_store_get_string")]
     #[doc(alias = "get_string")]
     fn string(&self, name: &str) -> Option<glib::GString> {
@@ -122,6 +336,12 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Get time of original image creation.
+    ///
+    /// # Returns
+    ///
+    /// [`glib::DateTime`][crate::glib::DateTime] or [`None`] if not set. Free with
+    ///  `g_date_time_unref()` when done.
     #[doc(alias = "gegl_metadata_store_get_timestamp")]
     #[doc(alias = "get_timestamp")]
     fn timestamp(&self) -> Option<glib::DateTime> {
@@ -130,6 +350,11 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Get title or caption for image.
+    ///
+    /// # Returns
+    ///
+    /// Title or [`None`] if not set
     #[doc(alias = "gegl_metadata_store_get_title")]
     #[doc(alias = "get_title")]
     fn title(&self) -> Option<glib::GString> {
@@ -144,6 +369,11 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
     //    unsafe { TODO: call ffi:gegl_metadata_store_get_value() }
     //}
 
+    /// Get warning.
+    ///
+    /// # Returns
+    ///
+    /// Warning or [`None`] if not set
     #[doc(alias = "gegl_metadata_store_get_warning")]
     #[doc(alias = "get_warning")]
     fn warning(&self) -> Option<glib::GString> {
@@ -152,6 +382,13 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Test whether the [`MetadataStore`][crate::MetadataStore] contains a value for the specified name.
+    /// ## `name`
+    /// Metadata name
+    ///
+    /// # Returns
+    ///
+    /// [`true`] if metadata is declared and contains a valid value.
     #[doc(alias = "gegl_metadata_store_has_value")]
     fn has_value(&self, name: &str) -> bool {
         unsafe {
@@ -164,6 +401,9 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
     //    unsafe { TODO: call ffi:gegl_metadata_store_register() }
     //}
 
+    /// Set name of image creator.
+    /// ## `artist`
+    /// Artist string
     #[doc(alias = "gegl_metadata_store_set_artist")]
     #[doc(alias = "artist")]
     fn set_artist(&self, artist: &str) {
@@ -172,6 +412,9 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Set the miscellaneous comment; conversion from GIF comment.
+    /// ## `comment`
+    /// Comment string
     #[doc(alias = "gegl_metadata_store_set_comment")]
     #[doc(alias = "comment")]
     fn set_comment(&self, comment: &str) {
@@ -180,6 +423,9 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Set the copyright notice.
+    /// ## `copyright`
+    /// Copyright string
     #[doc(alias = "gegl_metadata_store_set_copyright")]
     #[doc(alias = "copyright")]
     fn set_copyright(&self, copyright: &str) {
@@ -188,6 +434,9 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Set description of image.
+    /// ## `description`
+    /// Description string
     #[doc(alias = "gegl_metadata_store_set_description")]
     #[doc(alias = "description")]
     fn set_description(&self, description: &str) {
@@ -196,6 +445,9 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Set the legal disclaimer.
+    /// ## `disclaimer`
+    /// Disclaimer string
     #[doc(alias = "gegl_metadata_store_set_disclaimer")]
     #[doc(alias = "disclaimer")]
     fn set_disclaimer(&self, disclaimer: &str) {
@@ -204,6 +456,9 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Set the units used for the resolution (density) values.
+    /// ## `unit`
+    /// Units as a [`ResolutionUnit`][crate::ResolutionUnit]
     #[doc(alias = "gegl_metadata_store_set_resolution_unit")]
     #[doc(alias = "resolution-unit")]
     fn set_resolution_unit(&self, unit: ResolutionUnit) {
@@ -212,6 +467,9 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Set the X resolution or density in dots per unit.
+    /// ## `resolution_x`
+    /// X resolution or density
     #[doc(alias = "gegl_metadata_store_set_resolution_x")]
     #[doc(alias = "resolution-x")]
     fn set_resolution_x(&self, resolution_x: f64) {
@@ -220,6 +478,9 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Set the Y resolution or density in dots per unit.
+    /// ## `resolution_y`
+    /// Y resolution or density
     #[doc(alias = "gegl_metadata_store_set_resolution_y")]
     #[doc(alias = "resolution-y")]
     fn set_resolution_y(&self, resolution_y: f64) {
@@ -228,6 +489,9 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Set software used to create the image.
+    /// ## `software`
+    /// Software string
     #[doc(alias = "gegl_metadata_store_set_software")]
     #[doc(alias = "software")]
     fn set_software(&self, software: &str) {
@@ -236,6 +500,9 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Set device used to create the image.
+    /// ## `source`
+    /// Source string
     #[doc(alias = "gegl_metadata_store_set_source")]
     #[doc(alias = "source")]
     fn set_source(&self, source: &str) {
@@ -244,6 +511,13 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// A slightly more efficient version of [`set_value()`][Self::set_value()]
+    /// for string values avoiding a duplication. Otherwise it behaves the same
+    /// [`set_value()`][Self::set_value()].
+    /// ## `name`
+    /// Metadata name
+    /// ## `string`
+    /// String value to set
     #[doc(alias = "gegl_metadata_store_set_string")]
     fn set_string(&self, name: &str, string: &str) {
         unsafe {
@@ -251,6 +525,9 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Set time of original image creation.
+    /// ## `timestamp`
+    /// A [`glib::DateTime`][crate::glib::DateTime]
     #[doc(alias = "gegl_metadata_store_set_timestamp")]
     #[doc(alias = "timestamp")]
     fn set_timestamp(&self, timestamp: &glib::DateTime) {
@@ -259,6 +536,9 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Set title or caption for image.
+    /// ## `title`
+    /// Title string
     #[doc(alias = "gegl_metadata_store_set_title")]
     #[doc(alias = "title")]
     fn set_title(&self, title: &str) {
@@ -267,6 +547,15 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Set the specified metadata value. If `value` is [`None`] the default value from
+    /// the associated [`glib::ParamSpec`][crate::glib::ParamSpec] is used. This operation will fail if the value
+    /// has not been previously declared. A `changed::name` signal is emitted when
+    /// the value is set. If the value is shadowed by a property a `notify::name`
+    /// signal is also emitted.
+    /// ## `name`
+    /// Metadata name
+    /// ## `value`
+    /// (nullable): A valid [`glib::Value`][crate::glib::Value] or [`None`]
     #[doc(alias = "gegl_metadata_store_set_value")]
     fn set_value(&self, name: &str, value: &glib::Value) {
         unsafe {
@@ -274,6 +563,9 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Set the warning of nature of content.
+    /// ## `warning`
+    /// Warning string
     #[doc(alias = "gegl_metadata_store_set_warning")]
     #[doc(alias = "warning")]
     fn set_warning(&self, warning: &str) {
@@ -282,6 +574,13 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// Get the declared type of the value in the [`MetadataStore`][crate::MetadataStore].
+    /// ## `name`
+    /// Metadata name
+    ///
+    /// # Returns
+    ///
+    /// Declared `GType` of metadata value or `G_TYPE_INVALID`.
     #[doc(alias = "gegl_metadata_store_typeof_value")]
     fn typeof_value(&self, name: &str) -> glib::types::Type {
         unsafe {
@@ -289,6 +588,10 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
         }
     }
 
+    /// `::changed` is emitted when a metadata value is changed. This is analogous
+    /// to the `GObject::notify` signal.
+    /// ## `pspec`
+    /// A [`glib::ParamSpec`][crate::glib::ParamSpec] declaring the metadata value
     #[doc(alias = "changed")]
     fn connect_changed<F: Fn(&Self, &glib::ParamSpec) + 'static>(&self, detail: Option<&str>, f: F) -> SignalHandlerId {
         unsafe extern "C" fn changed_trampoline<P: IsA<MetadataStore>, F: Fn(&P, &glib::ParamSpec) + 'static>(this: *mut ffi::GeglMetadataStore, pspec: *mut glib::gobject_ffi::GParamSpec, f: glib::ffi::gpointer) {
@@ -309,6 +612,15 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
     //    InOut value: GObject.Value
     //}
 
+    /// `::mapped` is emitted after a file module registers a mapping and before
+    /// other processing takes place. An application may respond to the signal by
+    /// registering additional mappings or overriding existing values, for example
+    /// it might override the TIFF ImageDescription tag to format multiple metadata
+    /// values into the description.
+    /// ## `file_module`
+    /// The file module name
+    /// ## `exclude_unmapped`
+    /// [`true`] if the file module cannot handle unmapped values
     #[doc(alias = "mapped")]
     fn connect_mapped<F: Fn(&Self, &str, bool) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn mapped_trampoline<P: IsA<MetadataStore>, F: Fn(&P, &str, bool) + 'static>(this: *mut ffi::GeglMetadataStore, file_module: *mut std::ffi::c_char, exclude_unmapped: glib::ffi::gboolean, f: glib::ffi::gpointer) {
@@ -327,6 +639,13 @@ pub trait MetadataStoreExt: IsA<MetadataStore> + 'static {
     //    InOut value: GObject.Value
     //}
 
+    /// `::unmapped` is emitted when a file module tries to look up an unmapped
+    /// metadata name. When the handler returns a second attempt is made to look
+    /// up the metadata.
+    /// ## `file_module`
+    /// The file module name
+    /// ## `local_name`
+    /// The unmapped metadata name as used by the file module
     #[doc(alias = "unmapped")]
     fn connect_unmapped<F: Fn(&Self, &str, &str) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn unmapped_trampoline<P: IsA<MetadataStore>, F: Fn(&P, &str, &str) + 'static>(this: *mut ffi::GeglMetadataStore, file_module: *mut std::ffi::c_char, local_name: *mut std::ffi::c_char, f: glib::ffi::gpointer) {

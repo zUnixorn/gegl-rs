@@ -7,6 +7,7 @@ use crate::{ffi};
 use glib::{translate::*};
 
 glib::wrapper! {
+    ///
     #[doc(alias = "GeglOperation")]
     pub struct Operation(Object<ffi::GeglOperation>);
 
@@ -16,6 +17,15 @@ glib::wrapper! {
 }
 
 impl Operation {
+    /// ## `operation_type`
+    /// the name of the operation type we want to locate a property on.
+    /// ## `property_name`
+    /// the name of the property we seek.
+    ///
+    /// # Returns
+    ///
+    /// The paramspec of the matching property - or
+    /// NULL if there as no match.
     #[doc(alias = "gegl_operation_find_property")]
     pub fn find_property(operation_type: &str, property_name: &str) -> Option<glib::ParamSpec> {
         assert_initialized_main_thread!();
@@ -42,6 +52,17 @@ impl Operation {
         }
     }
 
+    /// ## `operation_type`
+    /// the name of the operation type we want to query to property keys for.
+    /// ## `property_name`
+    /// the property to query a key for.
+    /// ## `property_key_name`
+    /// the property mata data key to query
+    ///
+    /// # Returns
+    ///
+    /// NULL or a string with the meta-data value for the operation
+    /// key.
     #[doc(alias = "gegl_operation_get_property_key")]
     #[doc(alias = "get_property_key")]
     pub fn property_key(operation_type: &str, property_name: &str, property_key_name: &str) -> Option<glib::GString> {
@@ -51,6 +72,13 @@ impl Operation {
         }
     }
 
+    /// ## `operation_type`
+    /// the name of the operation type we want to query to property keys for.
+    ///
+    /// # Returns
+    ///
+    /// An allocated NULL
+    /// terminated array of operation-key names. The list should be freed with g_free after use.
     #[doc(alias = "gegl_operation_list_keys")]
     pub fn list_keys(operation_type: &str) -> Vec<glib::GString> {
         assert_initialized_main_thread!();
@@ -61,6 +89,13 @@ impl Operation {
         }
     }
 
+    /// ## `operation_type`
+    /// the name of the operation type we want to query to properties of.
+    ///
+    /// # Returns
+    ///
+    /// An allocated array of `GParamSpecs` describing the properties
+    /// of the operation available when a node has operation_type set. The list should be freed with g_free after use.
     #[doc(alias = "gegl_operation_list_properties")]
     pub fn list_properties(operation_type: &str) -> Vec<glib::ParamSpec> {
         assert_initialized_main_thread!();
@@ -71,6 +106,14 @@ impl Operation {
         }
     }
 
+    /// ## `operation_type`
+    /// the name of the operation type we want to query to property keys for.
+    /// ## `property_name`
+    /// the property to query a key for.
+    ///
+    /// # Returns
+    ///
+    /// An allocated NULL terminated array of property-key names. The list should be freed with g_free after use.
     #[doc(alias = "gegl_operation_list_property_keys")]
     pub fn list_property_keys(operation_type: &str, property_name: &str) -> Vec<glib::GString> {
         assert_initialized_main_thread!();

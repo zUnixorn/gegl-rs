@@ -17,6 +17,15 @@ glib::wrapper! {
 }
 
 impl Rectangle {
+    /// Creates a new rectangle set with the values from `x`, `y`, `width` and `height`.
+    /// ## `x`
+    /// upper left x coordinate
+    /// ## `y`
+    /// upper left y coordinate
+    /// ## `width`
+    /// width in pixels.
+    /// ## `height`
+    /// height in pixels.
     #[doc(alias = "gegl_rectangle_new")]
     pub fn new(x: i32, y: i32, width: u32, height: u32) -> Rectangle {
         assert_initialized_main_thread!();
@@ -25,6 +34,29 @@ impl Rectangle {
         }
     }
 
+    /// Aligns `rectangle` to a regular tile grid, of which `tile` is a representative
+    /// tile, and stores the result in `self`.
+    ///
+    /// `alignment` can be one of:
+    ///
+    ///  GEGL_RECTANGLE_ALIGNMENT_SUBSET: Calculate the biggest aligned rectangle
+    ///  contained in `rectangle`.
+    ///
+    ///  GEGL_RECTANGLE_ALIGNMENT_SUPERSET: Calculate the smallest aligned
+    ///  rectangle containing `rectangle`.
+    ///
+    ///  GEGL_RECTANGLE_ALIGNMENT_NEAREST: Calculate the nearest aligned rectangle
+    ///  to `rectangle`.
+    ///
+    /// `self` may point to the same object as `rectangle` or `tile`.
+    ///
+    /// Returns TRUE if the result is not empty.
+    /// ## `rectangle`
+    /// a [`Rectangle`][crate::Rectangle]
+    /// ## `tile`
+    /// a [`Rectangle`][crate::Rectangle]
+    /// ## `alignment`
+    /// a [`RectangleAlignment`][crate::RectangleAlignment] value
     #[doc(alias = "gegl_rectangle_align")]
     pub fn align(&mut self, rectangle: &Rectangle, tile: &Rectangle, alignment: RectangleAlignment) -> bool {
         unsafe {
@@ -32,6 +64,20 @@ impl Rectangle {
         }
     }
 
+    /// Aligns `rectangle` to the tile grid of `buffer`, and stores the result in
+    /// `self`.
+    ///
+    /// `alignment` has the same meaning as for [`align()`][Self::align()].
+    ///
+    /// `self` may point to the same object as `rectangle`.
+    ///
+    /// Returns TRUE if the result is not empty.
+    /// ## `rectangle`
+    /// a [`Rectangle`][crate::Rectangle]
+    /// ## `buffer`
+    /// a [`Buffer`][crate::Buffer]
+    /// ## `alignment`
+    /// a [`RectangleAlignment`][crate::RectangleAlignment] value
     #[doc(alias = "gegl_rectangle_align_to_buffer")]
     pub fn align_to_buffer(&mut self, rectangle: &Rectangle, buffer: &Buffer, alignment: RectangleAlignment) -> bool {
         unsafe {
@@ -39,6 +85,14 @@ impl Rectangle {
         }
     }
 
+    /// Computes the bounding box of the rectangles `source1` and `source2` and stores the
+    /// resulting bounding box in `self`.
+    ///
+    /// `self` may point to the same object as `source1` or `source2`.
+    /// ## `source1`
+    /// a [`Rectangle`][crate::Rectangle]
+    /// ## `source2`
+    /// a [`Rectangle`][crate::Rectangle]
     #[doc(alias = "gegl_rectangle_bounding_box")]
     pub fn bounding_box(&mut self, source1: &Rectangle, source2: &Rectangle) {
         unsafe {
@@ -46,6 +100,11 @@ impl Rectangle {
         }
     }
 
+    /// Checks if the [`Rectangle`][crate::Rectangle] `child` is fully contained within `self`.
+    ///
+    /// Returns TRUE if the `child` is fully contained in `self`.
+    /// ## `child`
+    /// a [`Rectangle`][crate::Rectangle]
     #[doc(alias = "gegl_rectangle_contains")]
     pub fn contains(&self, child: &Rectangle) -> bool {
         unsafe {
@@ -53,6 +112,7 @@ impl Rectangle {
         }
     }
 
+    /// For debugging purposes, not stable API.
     #[doc(alias = "gegl_rectangle_dump")]
     pub fn dump(&self) {
         unsafe {
@@ -60,6 +120,11 @@ impl Rectangle {
         }
     }
 
+    /// Create a new copy of `self`.
+    ///
+    /// # Returns
+    ///
+    /// a [`Rectangle`][crate::Rectangle]
     #[doc(alias = "gegl_rectangle_dup")]
 #[must_use]
     pub fn dup(&self) -> Option<Rectangle> {
@@ -75,6 +140,17 @@ impl Rectangle {
         }
     }
 
+    /// Check if a rectangle is equal to a set of parameters.
+    ///
+    /// Returns TRUE if `self` and `x`,`y` `width` x `height` are equal.
+    /// ## `x`
+    /// X coordinate
+    /// ## `y`
+    /// Y coordinate
+    /// ## `width`
+    /// width of rectangle
+    /// ## `height`
+    /// height of rectangle
     #[doc(alias = "gegl_rectangle_equal_coords")]
     pub fn equal_coords(&self, x: i32, y: i32, width: i32, height: i32) -> bool {
         unsafe {
@@ -82,6 +158,17 @@ impl Rectangle {
         }
     }
 
+    /// Calculates the intersection of two rectangles. If the rectangles do not
+    /// intersect, dest's width and height are set to 0 and its x and y values
+    /// are undefined.
+    ///
+    /// `self` may point to the same object as `src1` or `src2`.
+    ///
+    /// Returns TRUE if the rectangles intersect.
+    /// ## `src1`
+    /// a [`Rectangle`][crate::Rectangle]
+    /// ## `src2`
+    /// a [`Rectangle`][crate::Rectangle]
     #[doc(alias = "gegl_rectangle_intersect")]
     pub fn intersect(&mut self, src1: &Rectangle, src2: &Rectangle) -> bool {
         unsafe {
@@ -89,6 +176,9 @@ impl Rectangle {
         }
     }
 
+    /// Check if a rectangle has zero area.
+    ///
+    /// Returns TRUE if the width or height of `self` is 0.
     #[doc(alias = "gegl_rectangle_is_empty")]
     pub fn is_empty(&self) -> bool {
         unsafe {
@@ -96,6 +186,8 @@ impl Rectangle {
         }
     }
 
+    /// Returns TRUE if the GeglRectangle represents an infininte plane,
+    /// FALSE otherwise.
     #[doc(alias = "gegl_rectangle_is_infinite_plane")]
     pub fn is_infinite_plane(&self) -> bool {
         unsafe {
@@ -103,6 +195,15 @@ impl Rectangle {
         }
     }
 
+    /// Sets the `x`, `y`, `width` and `height` on `self`.
+    /// ## `x`
+    /// upper left x coordinate
+    /// ## `y`
+    /// upper left y coordinate
+    /// ## `width`
+    /// width in pixels.
+    /// ## `height`
+    /// height in pixels.
     #[doc(alias = "gegl_rectangle_set")]
     pub fn set(&mut self, x: i32, y: i32, width: u32, height: u32) {
         unsafe {
@@ -110,6 +211,16 @@ impl Rectangle {
         }
     }
 
+    /// Subtracts `subtrahend` from `minuend`, and stores the resulting rectangles in
+    /// `self`. Between 0 and 4 disjoint rectangles may be produced.
+    ///
+    /// `self` may contain `minuend` or `subtrahend`.
+    ///
+    /// Returns the number of resulting rectangles.
+    /// ## `minuend`
+    /// a [`Rectangle`][crate::Rectangle]
+    /// ## `subtrahend`
+    /// a [`Rectangle`][crate::Rectangle]
     #[doc(alias = "gegl_rectangle_subtract")]
     pub fn subtract(&mut self, minuend: &Rectangle, subtrahend: &Rectangle) -> i32 {
         unsafe {
@@ -117,6 +228,16 @@ impl Rectangle {
         }
     }
 
+    /// Computes the bounding box of the area formed by subtracting `subtrahend`
+    /// from `minuend`, and stores the result in `self`.
+    ///
+    /// `self` may point to the same object as `minuend` or `subtrahend`.
+    ///
+    /// Returns TRUE if the result is not empty.
+    /// ## `minuend`
+    /// a [`Rectangle`][crate::Rectangle]
+    /// ## `subtrahend`
+    /// a [`Rectangle`][crate::Rectangle]
     #[doc(alias = "gegl_rectangle_subtract_bounding_box")]
     pub fn subtract_bounding_box(&mut self, minuend: &Rectangle, subtrahend: &Rectangle) -> bool {
         unsafe {
@@ -124,6 +245,17 @@ impl Rectangle {
         }
     }
 
+    /// Computes the symmetric difference of the rectangles `source1` and `source2`,
+    /// and stores the resulting rectangles in `self`. Between 0 and 4
+    /// disjoint rectangles may be produced.
+    ///
+    /// `self` may contain `rectangle1` or `rectangle2`.
+    ///
+    /// Returns the number of resulting rectangles.
+    /// ## `source1`
+    /// a [`Rectangle`][crate::Rectangle]
+    /// ## `source2`
+    /// a [`Rectangle`][crate::Rectangle]
     #[doc(alias = "gegl_rectangle_xor")]
     pub fn xor(&mut self, source1: &Rectangle, source2: &Rectangle) -> i32 {
         unsafe {

@@ -8,6 +8,93 @@ use glib::{prelude::*,signal::{connect_raw, SignalHandlerId},translate::*};
 use std::{boxed::Box as Box_};
 
 glib::wrapper! {
+    ///
+    ///
+    /// ## Properties
+    ///
+    ///
+    /// #### `active-threads`
+    ///  Readable
+    ///
+    ///
+    /// #### `assigned-threads`
+    ///  Readable
+    ///
+    ///
+    /// #### `scratch-total`
+    ///  Readable
+    ///
+    ///
+    /// #### `swap-busy`
+    ///  Readable
+    ///
+    ///
+    /// #### `swap-file-size`
+    ///  Readable
+    ///
+    ///
+    /// #### `swap-queue-full`
+    ///  Readable
+    ///
+    ///
+    /// #### `swap-queue-stalls`
+    ///  Readable
+    ///
+    ///
+    /// #### `swap-queued-total`
+    ///  Readable
+    ///
+    ///
+    /// #### `swap-read-total`
+    ///  Readable
+    ///
+    ///
+    /// #### `swap-reading`
+    ///  Readable
+    ///
+    ///
+    /// #### `swap-total`
+    ///  Readable
+    ///
+    ///
+    /// #### `swap-total-uncompressed`
+    ///  Readable
+    ///
+    ///
+    /// #### `swap-write-total`
+    ///  Readable
+    ///
+    ///
+    /// #### `swap-writing`
+    ///  Readable
+    ///
+    ///
+    /// #### `tile-alloc-total`
+    ///  Readable
+    ///
+    ///
+    /// #### `tile-cache-hits`
+    ///  Readable
+    ///
+    ///
+    /// #### `tile-cache-misses`
+    ///  Readable
+    ///
+    ///
+    /// #### `tile-cache-total`
+    ///  Readable
+    ///
+    ///
+    /// #### `tile-cache-total-max`
+    ///  Readable
+    ///
+    ///
+    /// #### `tile-cache-total-uncompressed`
+    ///  Readable
+    ///
+    ///
+    /// #### `zoom-total`
+    ///  Readable
     #[doc(alias = "GeglStats")]
     pub struct Stats(Object<ffi::GeglStats>);
 

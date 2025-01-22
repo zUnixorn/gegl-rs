@@ -8,6 +8,17 @@ use glib::{prelude::*,signal::{connect_raw, SignalHandlerId},translate::*};
 use std::{boxed::Box as Box_};
 
 glib::wrapper! {
+    ///
+    ///
+    /// ## Properties
+    ///
+    ///
+    /// #### `string`
+    ///  Readable | Writeable
+    ///
+    /// # Implements
+    ///
+    /// [`AudioFragmentExt`][trait@crate::prelude::AudioFragmentExt]
     #[doc(alias = "GeglAudioFragment")]
     pub struct AudioFragment(Object<ffi::GeglAudioFragment, ffi::GeglAudioFragmentClass>);
 
@@ -70,6 +81,11 @@ assert_initialized_main_thread!();
     self.builder.build() }
 }
 
+/// Trait containing all [`struct@AudioFragment`] methods.
+///
+/// # Implementors
+///
+/// [`AudioFragment`][struct@crate::AudioFragment]
 pub trait AudioFragmentExt: IsA<AudioFragment> + 'static {
     #[doc(alias = "gegl_audio_fragment_get_channel_layout")]
     #[doc(alias = "get_channel_layout")]

@@ -7,6 +7,11 @@ use crate::{ffi,Metadata,MetadataStore};
 use glib::{prelude::*,translate::*};
 
 glib::wrapper! {
+    ///
+    ///
+    /// # Implements
+    ///
+    /// [`MetadataStoreExt`][trait@crate::prelude::MetadataStoreExt], [`MetadataExt`][trait@crate::prelude::MetadataExt]
     #[doc(alias = "GeglMetadataHash")]
     pub struct MetadataHash(Object<ffi::GeglMetadataHash, ffi::GeglMetadataHashClass>) @extends MetadataStore, @implements Metadata;
 
@@ -16,6 +21,11 @@ glib::wrapper! {
 }
 
 impl MetadataHash {
+    /// Create a new [`MetadataHash`][crate::MetadataHash]
+    ///
+    /// # Returns
+    ///
+    /// New [`MetadataHash`][crate::MetadataHash] cast to [`MetadataStore`][crate::MetadataStore]
     #[doc(alias = "gegl_metadata_hash_new")]
     pub fn new() -> MetadataHash {
         assert_initialized_main_thread!();

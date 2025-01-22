@@ -6,6 +6,7 @@
 use crate::{ffi};
 
 glib::wrapper! {
+    ///
     #[doc(alias = "GeglTileSource")]
     pub struct TileSource(Object<ffi::GeglTileSource, ffi::GeglTileSourceClass>);
 

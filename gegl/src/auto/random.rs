@@ -18,6 +18,8 @@ glib::wrapper! {
 }
 
 impl Random {
+    /// Creates a new random number generator initialized with a random seed.
+    /// This structure needs to be freed by the user with `gegl_random_free()`;
     #[doc(alias = "gegl_random_new")]
     pub fn new() -> Random {
         assert_initialized_main_thread!();
@@ -26,6 +28,10 @@ impl Random {
         }
     }
 
+    /// Return an opaque structure associated to the seed.
+    /// This structure needs to be freed by the user with `gegl_random_free()`;
+    /// ## `seed`
+    /// an integer seed, change for different permutation.
     #[doc(alias = "gegl_random_new_with_seed")]
     #[doc(alias = "new_with_seed")]
     pub fn with_seed(seed: u32) -> Random {
@@ -35,6 +41,7 @@ impl Random {
         }
     }
 
+    /// Return a new copy of an existing GeglRandom
     #[doc(alias = "gegl_random_duplicate")]
 #[must_use]
     pub fn duplicate(&mut self) -> Option<Random> {
@@ -43,6 +50,16 @@ impl Random {
         }
     }
 
+    /// Return a random floating point number in range 0.0 .. 1.0.
+    /// ## `x`
+    /// x coordinate
+    /// ## `y`
+    /// y coordinate
+    /// ## `z`
+    /// z coordinate (mipmap level)
+    /// ## `n`
+    /// number no (each x,y coordinate provides its own sequence of
+    /// numbers
     #[doc(alias = "gegl_random_float")]
     pub fn float(&self, x: i32, y: i32, z: i32, n: i32) -> f32 {
         unsafe {
@@ -50,6 +67,22 @@ impl Random {
         }
     }
 
+    /// Return a random floating point number in the range specified,
+    /// for the given x,y coordinates and GeglRandom provided, if multiple different
+    /// numbers are needed pass in incrementing n's.
+    /// ## `x`
+    /// x coordinate
+    /// ## `y`
+    /// y coordinate
+    /// ## `z`
+    /// z coordinate (mipmap level)
+    /// ## `n`
+    /// number no (each x,y coordinate provides its own sequence of
+    /// numbers
+    /// ## `min`
+    /// minimum value
+    /// ## `max`
+    /// maximum value
     #[doc(alias = "gegl_random_float_range")]
     pub fn float_range(&self, x: i32, y: i32, z: i32, n: i32, min: f32, max: f32) -> f32 {
         unsafe {
@@ -57,6 +90,16 @@ impl Random {
         }
     }
 
+    /// Return a random integer number in range 0 .. MAX_UINT
+    /// ## `x`
+    /// x coordinate
+    /// ## `y`
+    /// y coordinate
+    /// ## `z`
+    /// z coordinate (mipmap level)
+    /// ## `n`
+    /// number no (each x,y coordinate provides its own sequence of
+    /// numbers
     #[doc(alias = "gegl_random_int")]
     pub fn int(&self, x: i32, y: i32, z: i32, n: i32) -> u32 {
         unsafe {
@@ -64,6 +107,22 @@ impl Random {
         }
     }
 
+    /// Return a random integer point number in the range specified,
+    /// for the given x,y coordinates and GeglRandom provided, if multiple different
+    /// numbers are needed pass in incrementing n's.
+    /// ## `x`
+    /// x coordinate
+    /// ## `y`
+    /// y coordinate
+    /// ## `z`
+    /// z coordinate (mipmap level)
+    /// ## `n`
+    /// number no (each x,y coordinate provides its own sequence of
+    /// numbers
+    /// ## `min`
+    /// minimum value
+    /// ## `max`
+    /// maximum value+1
     #[doc(alias = "gegl_random_int_range")]
     pub fn int_range(&self, x: i32, y: i32, z: i32, n: i32, min: i32, max: i32) -> i32 {
         unsafe {
@@ -71,6 +130,9 @@ impl Random {
         }
     }
 
+    /// Change the seed of an existing GeglRandom.
+    /// ## `seed`
+    /// an integer seed, change for different permutation.
     #[doc(alias = "gegl_random_set_seed")]
     pub fn set_seed(&mut self, seed: u32) {
         unsafe {

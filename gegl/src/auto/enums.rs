@@ -575,11 +575,13 @@ impl From<DitherMethod> for glib::Value {
     }
 }
 
+/// Flags controlling the mapping strategy.
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GeglMapFlags")]
 pub enum MapFlags {
+    /// Prevent further mapping from being registered.
     #[doc(alias = "GEGL_MAP_EXCLUDE_UNMAPPED")]
     MapExcludeUnmapped,
 #[doc(hidden)]
@@ -810,15 +812,20 @@ impl From<RectangleAlignment> for glib::Value {
     }
 }
 
+/// An enumerated type specifying resolution (density) units. If resolution
+/// units are unknown, X and Y resolution specify the pixel aspect ratio.
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
 #[derive(Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GeglResolutionUnit")]
 pub enum ResolutionUnit {
+    /// Unknown or resolution not applicable.
     #[doc(alias = "GEGL_RESOLUTION_UNIT_NONE")]
     None,
+    /// Dots or pixels per inch.
     #[doc(alias = "GEGL_RESOLUTION_UNIT_DPI")]
     Dpi,
+    /// Dots or pixels per metre.
     #[doc(alias = "GEGL_RESOLUTION_UNIT_DPM")]
     Dpm,
 #[doc(hidden)]

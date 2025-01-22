@@ -7,6 +7,11 @@ use crate::{ffi,ResolutionUnit};
 use glib::{prelude::*,translate::*};
 
 glib::wrapper! {
+    ///
+    ///
+    /// # Implements
+    ///
+    /// [`MetadataExt`][trait@crate::prelude::MetadataExt]
     #[doc(alias = "GeglMetadata")]
     pub struct Metadata(Interface<ffi::GeglMetadata, ffi::GeglMetadataInterface>);
 
@@ -20,6 +25,11 @@ impl Metadata {
     
 }
 
+/// Trait containing all [`struct@Metadata`] methods.
+///
+/// # Implementors
+///
+/// [`MetadataHash`][struct@crate::MetadataHash], [`MetadataStore`][struct@crate::MetadataStore], [`Metadata`][struct@crate::Metadata]
 pub trait MetadataExt: IsA<Metadata> + 'static {
     //#[doc(alias = "gegl_metadata_iter_get_value")]
     //fn iter_get_value(&self, iter: /*Ignored*/&mut MetadataIter, value: &mut glib::Value) -> bool {
@@ -51,6 +61,19 @@ pub trait MetadataExt: IsA<Metadata> + 'static {
     //    unsafe { TODO: call ffi:gegl_metadata_register_map() }
     //}
 
+    /// Set resolution retrieved from image file's metadata. Intended for use by
+    /// the image file reader. If resolution is not supported by the application or
+    /// if the operation fails [`false`] is returned and the values are ignored.
+    /// ## `unit`
+    /// Specify [`ResolutionUnit`][crate::ResolutionUnit]
+    /// ## `x`
+    /// X resolution
+    /// ## `y`
+    /// Y resolution
+    ///
+    /// # Returns
+    ///
+    /// [`true`] if successful.
     #[doc(alias = "gegl_metadata_set_resolution")]
     fn set_resolution(&self, unit: ResolutionUnit, x: f32, y: f32) -> bool {
         unsafe {
@@ -58,6 +81,9 @@ pub trait MetadataExt: IsA<Metadata> + 'static {
         }
     }
 
+    /// Unregister the file module mappings and any further mappings added or
+    /// modified by the application. This should be called after the file module
+    /// completes operations.
     #[doc(alias = "gegl_metadata_unregister_map")]
     fn unregister_map(&self) {
         unsafe {
